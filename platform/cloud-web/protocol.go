@@ -182,7 +182,7 @@ func buildRegisterPayload(name, project, transport string) wireRegister {
 	return wireRegister{
 		Type:      "register",
 		Platform:  name,
-		Client:    "cc-connect",
+		Client:    "agent-connect",
 		Project:   project,
 		Transport: transport,
 		Metadata: map[string]any{

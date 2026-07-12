@@ -13,7 +13,7 @@ import (
 // ── P0-11: 上下文保持（最核心场景）──────────────────────────────────────────
 //
 // This is arguably the most important test in the suite. It validates that:
-//   1. cc-connect maintains a persistent session across multiple messages
+//   1. agent-connect maintains a persistent session across multiple messages
 //   2. the real agent (Claude Code) retains conversation context
 //   3. the session key routing is correct end-to-end
 //

@@ -59,7 +59,7 @@ func (m *launchdManager) Install(cfg Config) error {
 	// LaunchAgents path; root can still read but that is the user's own
 	// machine boundary. os.WriteFile only applies perm on create, so
 	// Chmod afterwards is required to harden reinstalls of files that
-	// pre-existed at 0644 from earlier cc-connect versions.
+	// pre-existed at 0644 from earlier agent-connect versions.
 	if err := os.WriteFile(plistPath, []byte(plist), 0600); err != nil {
 		return fmt.Errorf("write plist: %w", err)
 	}
@@ -350,4 +350,3 @@ func buildPlist(cfg Config) string {
 </plist>
 `, launchdLabel, xmlEscape(cfg.BinaryPath), xmlEscape(cfg.WorkDir), xmlEscape(cfg.LogFile), cfg.LogMaxSize, cfg.LogMaxBackups, xmlEscape(envPATH), envExtra)
 }
-

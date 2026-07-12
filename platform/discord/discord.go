@@ -47,7 +47,7 @@ type progressPlatform struct {
 type Platform struct {
 	token                      string
 	allowFrom                  string
-	guildID                    string   // optional: per-guild registration (instant) vs global (up to 1h propagation)
+	guildID                    string // optional: per-guild registration (instant) vs global (up to 1h propagation)
 	progressStyle              string
 	groupReplyAllGuilds        []string // guild IDs where groupReplyAll is active; "*" = all guilds
 	shareSessionInChannel      bool
@@ -540,7 +540,7 @@ func (p *Platform) SetLifecycleHandler(h core.PlatformLifecycleHandler) {
 // OnPlatformReady as the signal that the platform is actually usable.
 //
 // Before this change Start returned the first session.Open() error directly,
-// which meant a transient proxy/network blip during cc-connect startup
+// which meant a transient proxy/network blip during agent-connect startup
 // permanently took Discord offline until manual restart (release-gate
 // 2026-06-14: "discord: open gateway: ... EOF" with no retry).
 func (p *Platform) Start(handler core.MessageHandler) error {
@@ -848,7 +848,7 @@ func (p *Platform) handleInteraction(s *discordgo.Session, i *discordgo.Interact
 		MessageID: i.ID,
 		ChannelID: i.ChannelID,
 		UserID:    userID, UserName: userName,
-		Content:  cmdText, ReplyCtx: rctx,
+		Content: cmdText, ReplyCtx: rctx,
 	}
 	msg.ChatName, _ = p.ResolveChannelName(channelID)
 	p.dispatchMessage(msg)

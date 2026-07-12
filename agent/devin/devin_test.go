@@ -52,7 +52,7 @@ func TestApplyDevinDefaults_UserOptsWin(t *testing.T) {
 // TestApplyDevinDefaults_BlankCommandGetsDefault covers a subtle TOML
 // quirk: `command = ""` (explicit blank) should be treated as "use
 // the default" rather than surfacing a cryptic "command is required"
-// error. Matches how the rest of cc-connect treats whitespace-only
+// error. Matches how the rest of agent-connect treats whitespace-only
 // string options.
 func TestApplyDevinDefaults_BlankCommandGetsDefault(t *testing.T) {
 	got := applyDevinDefaults(map[string]any{"command": "   "})

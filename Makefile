@@ -1,6 +1,6 @@
-APP        := cc-connect
-MODULE     := github.com/chenhg5/cc-connect
-CMD        := ./cmd/cc-connect
+APP        := agent-connect
+MODULE     := github.com/chenhg5/agent-connect
+CMD        := ./cmd/agent-connect
 DIST       := dist
 
 VERSION := v1.3.3

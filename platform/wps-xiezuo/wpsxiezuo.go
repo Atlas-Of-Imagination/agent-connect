@@ -1088,7 +1088,7 @@ func cleanReplyContent(content string) string {
 //     whitespace inside a block where the markdown renderer preserves
 //     content verbatim, so visually nothing changes).
 //
-// We deliberately do not normalize "\r\n" → "\n" first; cc-connect engine
+// We deliberately do not normalize "\r\n" → "\n" first; agent-connect engine
 // emits Unix newlines, and forcing the transform on already-converted
 // "  \n" would over-indent (which is also visually benign but pointless).
 func applyWPSLineBreaks(content string) string {

@@ -25,7 +25,7 @@
 //     these are the user-facing surfaces.
 //  5. Keep each test self-contained (own t.TempDir(), own engine).
 //
-// Full inventory: projects/cc-connect/agents/qa-cursor/release-gate/CUJ-INVENTORY.md
+// Full inventory: projects/agent-connect/agents/qa-cursor/release-gate/CUJ-INVENTORY.md
 package core
 
 import (
@@ -64,8 +64,8 @@ type cujAgent struct {
 	// Used by tests that need to drive a multi-event turn (text chunks +
 	// permission request + result) from a single Send call. See
 	// setNextSessionEvents on cujAgent.
-	nextSessionEvents    []Event
-	nextSessionDelayMs   int
+	nextSessionEvents  []Event
+	nextSessionDelayMs int
 }
 
 func (a *cujAgent) Name() string { return "cuj" }
@@ -553,7 +553,7 @@ func TestCUJ_B9_SearchFindsKeywordInHistory(t *testing.T) {
 }
 
 // ===========================================================================
-// CUJ-D7 · outgoing_rate_limit throttles bursts so cc-connect does not get
+// CUJ-D7 · outgoing_rate_limit throttles bursts so agent-connect does not get
 // the bot banned by IM platforms for spamming. Throttle is end-to-end:
 // SendToSession → waitOutgoing → p.Send.
 //
@@ -798,7 +798,7 @@ func TestCUJ_E5_TimerDisappearsAfterFiring(t *testing.T) {
 }
 
 // ===========================================================================
-// CUJ-B12 · After cc-connect restarts, the user's session, history, agent
+// CUJ-B12 · After agent-connect restarts, the user's session, history, agent
 // session ID, and cron jobs all survive — the user can continue as if
 // nothing happened.
 //
@@ -1130,8 +1130,8 @@ func TestCUJ_A3_ImageReachesAgent(t *testing.T) {
 	msg := &Message{
 		SessionKey: "test:img", Platform: "test", MessageID: "img1",
 		UserID: "img", UserName: "img",
-		Content: "what is in this image",
-		Images:  []ImageAttachment{{MimeType: "image/png", Data: []byte("\x89PNG fake"), FileName: "chart.png"}},
+		Content:  "what is in this image",
+		Images:   []ImageAttachment{{MimeType: "image/png", Data: []byte("\x89PNG fake"), FileName: "chart.png"}},
 		ReplyCtx: "ctx",
 	}
 	e.ReceiveMessage(plat, msg)
@@ -1194,8 +1194,8 @@ func TestCUJ_A5_FileReachesAgent(t *testing.T) {
 	msg := &Message{
 		SessionKey: "test:file", Platform: "test", MessageID: "f1",
 		UserID: "file", UserName: "file",
-		Content: "read this file",
-		Files:   []FileAttachment{{MimeType: "text/plain", Data: []byte("hello world"), FileName: "note.txt"}},
+		Content:  "read this file",
+		Files:    []FileAttachment{{MimeType: "text/plain", Data: []byte("hello world"), FileName: "note.txt"}},
 		ReplyCtx: "ctx",
 	}
 	e.ReceiveMessage(plat, msg)
@@ -1534,7 +1534,7 @@ func TestCUJ_D6_InboundRateLimitDrops(t *testing.T) {
 	n := len(env.agent.sessions)
 	env.agent.mu.Unlock()
 	// With limit=2, the agent should not see all 5 — at most 2 sessions
-	// (or 1 if cc-connect reuses session per burst).
+	// (or 1 if agent-connect reuses session per burst).
 	if n > 2 {
 		t.Fatalf("rate_limit failed: agent received %d session starts for 5 fast messages", n)
 	}
@@ -1912,7 +1912,7 @@ func TestCUJ_G6_NetworkFlapLinkedToPlatformLayer(t *testing.T) {
 // SPRINT 2 · H organization (multi-platform/multi-project remaining)
 // ===========================================================================
 
-// CUJ-H1 · Two projects in one cc-connect: sessions/messages do not cross
+// CUJ-H1 · Two projects in one agent-connect: sessions/messages do not cross
 // project boundaries. Covered at integration level.
 func TestCUJ_H1_MultiProjectLinkedToIntegration(t *testing.T) {
 	t.Log("CUJ-H1: covered by release-gate TestCC_MULTI_01_multi_project")
@@ -2325,4 +2325,3 @@ func TestCUJ_STREAM1_StreamingResumesAfterPermissionPrompt(t *testing.T) {
 		}
 	}
 }
-

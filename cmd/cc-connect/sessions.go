@@ -17,12 +17,12 @@ import (
 // sessionFileData mirrors the unexported sessionSnapshot in core/session.go
 // for JSON deserialization of session files.
 type sessionFileData struct {
-	Sessions      map[string]*sessionData    `json:"sessions"`
-	ActiveSession map[string]string          `json:"active_session"`
-	UserSessions  map[string][]string        `json:"user_sessions"`
-	Counter       int64                      `json:"counter"`
-	SessionNames  map[string]string          `json:"session_names,omitempty"`
-	UserMeta      map[string]*userMetaData   `json:"user_meta,omitempty"`
+	Sessions      map[string]*sessionData  `json:"sessions"`
+	ActiveSession map[string]string        `json:"active_session"`
+	UserSessions  map[string][]string      `json:"user_sessions"`
+	Counter       int64                    `json:"counter"`
+	SessionNames  map[string]string        `json:"session_names,omitempty"`
+	UserMeta      map[string]*userMetaData `json:"user_meta,omitempty"`
 }
 
 type userMetaData struct {
@@ -101,7 +101,7 @@ func runSessions(args []string) {
 		}
 		if id == "" {
 			fmt.Fprintln(os.Stderr, "Error: session ID is required")
-			fmt.Fprintln(os.Stderr, "Usage: cc-connect sessions show <session-id> [-n N]")
+			fmt.Fprintln(os.Stderr, "Usage: agent-connect sessions show <session-id> [-n N]")
 			os.Exit(1)
 		}
 		runSessionsShow(dataDir, id, limit)
@@ -292,7 +292,7 @@ func runSessionsShow(dataDir, id string, limit int) {
 
 	if record == nil {
 		fmt.Fprintf(os.Stderr, "Error: session %q not found\n", id)
-		fmt.Fprintln(os.Stderr, "Use 'cc-connect sessions list' to see available sessions.")
+		fmt.Fprintln(os.Stderr, "Use 'agent-connect sessions list' to see available sessions.")
 		os.Exit(1)
 	}
 
@@ -419,7 +419,7 @@ func truncate(s string, maxLen int) string {
 }
 
 func printSessionsUsage() {
-	fmt.Println(`Usage: cc-connect sessions [command] [options]
+	fmt.Println(`Usage: agent-connect sessions [command] [options]
 
 Browse and manage session history.
 
@@ -445,12 +445,12 @@ Prune options:
              --merge is also set.
 
 Examples:
-  cc-connect sessions                           Interactive TUI browser
-  cc-connect sessions list                      List all sessions
-  cc-connect sessions show "mybot:s1"           Show all messages in session
-  cc-connect sessions show "#1" -n 20           Show last 20 messages of first session
-  cc-connect sessions prune                     Remove empty duplicate sessions
-  cc-connect sessions prune --empty             Same as above, explicit form
-  cc-connect sessions prune --merge             Merge duplicates, keeping most recent
-  cc-connect sessions prune mybot --merge       Prune specific project`)
+  agent-connect sessions                           Interactive TUI browser
+  agent-connect sessions list                      List all sessions
+  agent-connect sessions show "mybot:s1"           Show all messages in session
+  agent-connect sessions show "#1" -n 20           Show last 20 messages of first session
+  agent-connect sessions prune                     Remove empty duplicate sessions
+  agent-connect sessions prune --empty             Same as above, explicit form
+  agent-connect sessions prune --merge             Merge duplicates, keeping most recent
+  agent-connect sessions prune mybot --merge       Prune specific project`)
 }

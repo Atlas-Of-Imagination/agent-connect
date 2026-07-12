@@ -2,7 +2,7 @@
 
 ## Overview
 
-Enable a single cc-connect bot (one Slack token) to serve multiple workspaces, with the channel determining which Claude Code working directory and session to use.
+Enable a single agent-connect bot (one Slack token) to serve multiple workspaces, with the channel determining which Claude Code working directory and session to use.
 
 ## Config
 

@@ -88,7 +88,7 @@ type FileAttachment struct {
 // in their prompts so the CLI can read them with built-in tools.
 //
 // workDir may be absolute or relative; the returned paths are always absolute.
-// When workDir is relative, filepath.Abs resolves it against the cc-connect
+// When workDir is relative, filepath.Abs resolves it against the agent-connect
 // process's current working directory, so callers running from different cwd
 // contexts (especially those where the agent's "workDir" is itself relative
 // to the user's home, like "~/project") still get paths the agent can

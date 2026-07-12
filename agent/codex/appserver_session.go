@@ -294,8 +294,8 @@ func (s *appServerSession) connect() error {
 func (s *appServerSession) initialize() error {
 	params := map[string]any{
 		"clientInfo": map[string]any{
-			"name":    "cc-connect-codex-agent",
-			"title":   "CC Connect Codex Agent",
+			"name":    "agent-connect-codex-agent",
+			"title":   "Agent Connect Codex Agent",
 			"version": "0.1.0",
 		},
 		"capabilities": map[string]any{

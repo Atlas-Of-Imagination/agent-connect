@@ -19,7 +19,7 @@ const (
 
 // I18n provides internationalized messages.
 //
-// All exported methods are safe to call from multiple goroutines: cc-connect
+// All exported methods are safe to call from multiple goroutines: agent-connect
 // fans out platform message handlers concurrently, all of which can call
 // DetectAndSet (writes `detected`) and T / CurrentLang (read `lang`/`detected`)
 // at the same time. Without the mutex `go test -race` flags real data races
@@ -378,31 +378,31 @@ const (
 	MsgCronIDLabel               MsgKey = "cron_id_label"
 	MsgCronFailedSuffix          MsgKey = "cron_failed_suffix"
 
-	MsgTimerNotAvailable  MsgKey = "timer_not_available"
-	MsgTimerUsage         MsgKey = "timer_usage"
-	MsgTimerAddUsage      MsgKey = "timer_add_usage"
-	MsgTimerAdded         MsgKey = "timer_added"
-	MsgTimerAddedExec     MsgKey = "timer_added_exec"
-	MsgTimerAddExecUsage  MsgKey = "timer_addexec_usage"
-	MsgTimerEmpty         MsgKey = "timer_empty"
-	MsgTimerListTitle     MsgKey = "timer_list_title"
-	MsgTimerListFooter    MsgKey = "timer_list_footer"
-	MsgTimerDelUsage      MsgKey = "timer_del_usage"
-	MsgTimerMuteUsage     MsgKey = "timer_mute_usage"
-	MsgTimerDeleted       MsgKey = "timer_deleted"
-	MsgTimerNotFound      MsgKey = "timer_not_found"
-	MsgTimerMuted         MsgKey = "timer_muted"
-	MsgTimerUnmuted       MsgKey = "timer_unmuted"
-	MsgTimerCardHint      MsgKey = "timer_card_hint"
-	MsgTimerBtnMute       MsgKey = "timer_btn_mute"
-	MsgTimerBtnUnmute     MsgKey = "timer_btn_unmute"
-	MsgTimerBtnDelete     MsgKey = "timer_btn_delete"
-	MsgTimerIDLabel       MsgKey = "timer_id_label"
-	MsgTimerScheduledLabel MsgKey = "timer_scheduled_label"
-	MsgTimerFailedSuffix  MsgKey = "timer_failed_suffix"
-	MsgCommandsTagAgent          MsgKey = "commands_tag_agent"
-	MsgCommandsTagShell          MsgKey = "commands_tag_shell"
-	MsgUpgradeTimeoutSuffix      MsgKey = "upgrade_timeout_suffix"
+	MsgTimerNotAvailable    MsgKey = "timer_not_available"
+	MsgTimerUsage           MsgKey = "timer_usage"
+	MsgTimerAddUsage        MsgKey = "timer_add_usage"
+	MsgTimerAdded           MsgKey = "timer_added"
+	MsgTimerAddedExec       MsgKey = "timer_added_exec"
+	MsgTimerAddExecUsage    MsgKey = "timer_addexec_usage"
+	MsgTimerEmpty           MsgKey = "timer_empty"
+	MsgTimerListTitle       MsgKey = "timer_list_title"
+	MsgTimerListFooter      MsgKey = "timer_list_footer"
+	MsgTimerDelUsage        MsgKey = "timer_del_usage"
+	MsgTimerMuteUsage       MsgKey = "timer_mute_usage"
+	MsgTimerDeleted         MsgKey = "timer_deleted"
+	MsgTimerNotFound        MsgKey = "timer_not_found"
+	MsgTimerMuted           MsgKey = "timer_muted"
+	MsgTimerUnmuted         MsgKey = "timer_unmuted"
+	MsgTimerCardHint        MsgKey = "timer_card_hint"
+	MsgTimerBtnMute         MsgKey = "timer_btn_mute"
+	MsgTimerBtnUnmute       MsgKey = "timer_btn_unmute"
+	MsgTimerBtnDelete       MsgKey = "timer_btn_delete"
+	MsgTimerIDLabel         MsgKey = "timer_id_label"
+	MsgTimerScheduledLabel  MsgKey = "timer_scheduled_label"
+	MsgTimerFailedSuffix    MsgKey = "timer_failed_suffix"
+	MsgCommandsTagAgent     MsgKey = "commands_tag_agent"
+	MsgCommandsTagShell     MsgKey = "commands_tag_shell"
+	MsgUpgradeTimeoutSuffix MsgKey = "upgrade_timeout_suffix"
 
 	MsgCronScheduleLabel MsgKey = "cron_schedule_label"
 	MsgCronNextRunLabel  MsgKey = "cron_next_run_label"
@@ -580,6 +580,7 @@ const (
 	MsgBuiltinCmdHelp      MsgKey = "help"
 	MsgBuiltinCmdBind      MsgKey = "bind"
 	MsgBuiltinCmdShell     MsgKey = "shell"
+	MsgBuiltinCmdWorktree  MsgKey = "create-worktree"
 	MsgBuiltinCmdDir       MsgKey = "dir"
 	MsgBuiltinCmdDiff      MsgKey = "diff"
 	MsgBuiltinCmdPs        MsgKey = "ps"
@@ -587,28 +588,38 @@ const (
 	MsgDiffEmpty       MsgKey = "diff_empty"
 	MsgDiffNoDiff2HTML MsgKey = "diff_no_diff2html"
 
-	MsgDirChanged          MsgKey = "dir_changed"
-	MsgDirCurrent          MsgKey = "dir_current"
-	MsgDirReset            MsgKey = "dir_reset"
-	MsgDirUsage            MsgKey = "dir_usage"
-	MsgDirNotSupported     MsgKey = "dir_not_supported"
-	MsgDirInvalidPath      MsgKey = "dir_invalid_path"
-	MsgDirHistoryTitle     MsgKey = "dir_history_title"
-	MsgDirHistoryHint      MsgKey = "dir_history_hint"
-	MsgDirInvalidIndex     MsgKey = "dir_invalid_index"
-	MsgDirNoHistory        MsgKey = "dir_no_history"
-	MsgDirNoPrevious       MsgKey = "dir_no_previous"
-	MsgDirCardTitle        MsgKey = "dir_card_title"
-	MsgDirCardPageHint     MsgKey = "dir_card_page_hint"
-	MsgDirCardEmptyHistory MsgKey = "dir_card_empty_history"
-	MsgDirCardReset        MsgKey = "dir_card_reset"
-	MsgDirCardPrev         MsgKey = "dir_card_prev"
-	MsgShow                MsgKey = "show"
-	MsgShowUsage           MsgKey = "show_usage"
-	MsgShowParseError      MsgKey = "show_parse_error"
-	MsgShowNotFound        MsgKey = "show_not_found"
-	MsgShowDirWithLocation MsgKey = "show_dir_with_location"
-	MsgShowReadFailed      MsgKey = "show_read_failed"
+	MsgDirChanged                 MsgKey = "dir_changed"
+	MsgDirCurrent                 MsgKey = "dir_current"
+	MsgDirReset                   MsgKey = "dir_reset"
+	MsgDirUsage                   MsgKey = "dir_usage"
+	MsgDirNotSupported            MsgKey = "dir_not_supported"
+	MsgDirInvalidPath             MsgKey = "dir_invalid_path"
+	MsgDirHistoryTitle            MsgKey = "dir_history_title"
+	MsgDirHistoryHint             MsgKey = "dir_history_hint"
+	MsgDirInvalidIndex            MsgKey = "dir_invalid_index"
+	MsgDirNoHistory               MsgKey = "dir_no_history"
+	MsgDirNoPrevious              MsgKey = "dir_no_previous"
+	MsgDirCardTitle               MsgKey = "dir_card_title"
+	MsgDirCardPageHint            MsgKey = "dir_card_page_hint"
+	MsgDirCardEmptyHistory        MsgKey = "dir_card_empty_history"
+	MsgDirCardReset               MsgKey = "dir_card_reset"
+	MsgDirCardPrev                MsgKey = "dir_card_prev"
+	MsgCreateWorktreeUsage        MsgKey = "create_worktree_usage"
+	MsgCreateWorktreeStarted      MsgKey = "create_worktree_started"
+	MsgCreateWorktreeNotGit       MsgKey = "create_worktree_not_git"
+	MsgCreateWorktreeExists       MsgKey = "create_worktree_exists"
+	MsgCreateWorktreeGitFailed    MsgKey = "create_worktree_git_failed"
+	MsgCreateWorktreeSetupMissing MsgKey = "create_worktree_setup_missing"
+	MsgCreateWorktreeSetupDone    MsgKey = "create_worktree_setup_done"
+	MsgCreateWorktreeSetupFailed  MsgKey = "create_worktree_setup_failed"
+	MsgCreateWorktreeSwitchFailed MsgKey = "create_worktree_switch_failed"
+	MsgCreateWorktreeSuccess      MsgKey = "create_worktree_success"
+	MsgShow                       MsgKey = "show"
+	MsgShowUsage                  MsgKey = "show_usage"
+	MsgShowParseError             MsgKey = "show_parse_error"
+	MsgShowNotFound               MsgKey = "show_not_found"
+	MsgShowDirWithLocation        MsgKey = "show_dir_with_location"
+	MsgShowReadFailed             MsgKey = "show_read_failed"
 
 	// Multi-workspace messages
 	MsgWsNotEnabled             MsgKey = "ws_not_enabled"
@@ -962,18 +973,18 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "🌐 Idioma actual: **%s**\n\nUso: /lang <en|zh|zh-TW|ja|es|auto>",
 	},
 	MsgUnknownCommand: {
-		LangEnglish:            "`%s` is not a cc-connect command, forwarding to agent...",
-		LangChinese:            "`%s` 不是 cc-connect 命令，已转发给 Agent 处理...",
-		LangTraditionalChinese: "`%s` 不是 cc-connect 命令，已轉發給 Agent 處理...",
-		LangJapanese:           "`%s` は cc-connect のコマンドではありません。エージェントに転送します...",
-		LangSpanish:            "`%s` no es un comando de cc-connect, reenviando al agente...",
+		LangEnglish:            "`%s` is not a agent-connect command, forwarding to agent...",
+		LangChinese:            "`%s` 不是 agent-connect 命令，已转发给 Agent 处理...",
+		LangTraditionalChinese: "`%s` 不是 agent-connect 命令，已轉發給 Agent 處理...",
+		LangJapanese:           "`%s` は agent-connect のコマンドではありません。エージェントに転送します...",
+		LangSpanish:            "`%s` no es un comando de agent-connect, reenviando al agente...",
 	},
 	MsgWelcome: {
-		LangEnglish:            "👋 Hi! I'm cc-connect, bridging you to **%s**.\n\nJust send a message to chat with the agent. Type /help to see built-in commands.",
-		LangChinese:            "👋 你好！我是 cc-connect，已为你连接到 **%s**。\n\n直接发送消息即可与 Agent 对话。输入 /help 查看内置命令。",
-		LangTraditionalChinese: "👋 你好！我是 cc-connect，已為你連接到 **%s**。\n\n直接發送訊息即可與 Agent 對話。輸入 /help 查看內建命令。",
-		LangJapanese:           "👋 こんにちは！cc-connect が **%s** に接続しました。\n\nメッセージを送信すればエージェントと会話できます。/help で組み込みコマンド一覧を確認できます。",
-		LangSpanish:            "👋 ¡Hola! Soy cc-connect, conectándote con **%s**.\n\nEnvía un mensaje para chatear con el agente. Usa /help para ver los comandos integrados.",
+		LangEnglish:            "👋 Hi! I'm agent-connect, bridging you to **%s**.\n\nJust send a message to chat with the agent. Type /help to see built-in commands.",
+		LangChinese:            "👋 你好！我是 agent-connect，已为你连接到 **%s**。\n\n直接发送消息即可与 Agent 对话。输入 /help 查看内置命令。",
+		LangTraditionalChinese: "👋 你好！我是 agent-connect，已為你連接到 **%s**。\n\n直接發送訊息即可與 Agent 對話。輸入 /help 查看內建命令。",
+		LangJapanese:           "👋 こんにちは！agent-connect が **%s** に接続しました。\n\nメッセージを送信すればエージェントと会話できます。/help で組み込みコマンド一覧を確認できます。",
+		LangSpanish:            "👋 ¡Hola! Soy agent-connect, conectándote con **%s**.\n\nEnvía un mensaje para chatear con el agente. Usa /help para ver los comandos integrados.",
 	},
 	MsgHelp: {
 		LangEnglish: "📖 Available Commands\n\n" +
@@ -995,6 +1006,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/compress\n  Compress conversation context\n\n" +
 			"/tts [always|voice_only]\n  View/switch text-to-speech mode\n\n" +
 			"/shell [--timeout <sec>] <command>\n  Run a shell command and return the output (! prefix shortcut: !cmd)\n\n" +
+			"/create-worktree <new-branch> [base-branch]\n  Create a git worktree, run setup.sh, and use it for this chat\n\n" +
 			"/show <ref>\n  View a file, directory, or code snippet by reference\n\n" +
 			"/dir [path|reset]\n  Show, switch, or reset agent working directory\n\n" +
 			"/stop\n  Stop current execution\n\n" +
@@ -1010,9 +1022,9 @@ var messages = map[MsgKey]map[Language]string{
 			"/doctor\n  Run system diagnostics\n\n" +
 			"/usage\n  Show account/model quota usage\n\n" +
 			"/upgrade\n  Check for updates and self-update\n\n" +
-			"/restart\n  Restart cc-connect service\n\n" +
+			"/restart\n  Restart agent-connect service\n\n" +
 			"/status\n  Show system status\n\n" +
-			"/version\n  Show cc-connect version\n\n" +
+			"/version\n  Show agent-connect version\n\n" +
 			"/whoami\n  Show your User ID (for allow_from / admin_from)\n\n" +
 			"/help\n  Show this help\n\n" +
 			"Tip: Commands support prefix matching, e.g. `/pro l` = `/provider list`, `/sw 2` = `/switch 2`.\n\n" +
@@ -1039,6 +1051,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/compress\n  压缩会话上下文\n\n" +
 			"/tts [always|voice_only]\n  查看/切换语音合成模式\n\n" +
 			"/shell [--timeout <秒>] <命令>\n  执行 Shell 命令并返回结果（快捷方式：!命令）\n\n" +
+			"/create-worktree <新分支> [基准分支]\n  创建 git worktree，运行 setup.sh，并让当前会话使用它\n\n" +
 			"/show <引用>\n  按引用查看文件、目录或代码片段\n\n" +
 			"/dir [路径|reset]\n  查看、切换或重置 Agent 工作目录\n\n" +
 			"/stop\n  停止当前执行\n\n" +
@@ -1054,9 +1067,9 @@ var messages = map[MsgKey]map[Language]string{
 			"/doctor\n  运行系统诊断\n\n" +
 			"/usage\n  查看账号/模型限额使用情况\n\n" +
 			"/upgrade\n  检查更新并自动升级\n\n" +
-			"/restart\n  重启 cc-connect 服务\n\n" +
+			"/restart\n  重启 agent-connect 服务\n\n" +
 			"/status\n  查看系统状态\n\n" +
-			"/version\n  查看 cc-connect 版本\n\n" +
+			"/version\n  查看 agent-connect 版本\n\n" +
 			"/whoami\n  查看你的 User ID（用于 allow_from / admin_from 配置）\n\n" +
 			"/help\n  显示此帮助\n\n" +
 			"提示：命令支持前缀匹配，如 `/pro l` = `/provider list`，`/sw 2` = `/switch 2`。\n\n" +
@@ -1083,6 +1096,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/compress\n  壓縮會話上下文\n\n" +
 			"/tts [always|voice_only]\n  查看/切換語音合成模式\n\n" +
 			"/shell [--timeout <秒>] <命令>\n  執行 Shell 命令並返回結果（快捷方式：!命令）\n\n" +
+			"/create-worktree <新分支> [基準分支]\n  建立 git worktree，執行 setup.sh，並讓當前會話使用它\n\n" +
 			"/dir [路徑|reset]\n  查看、切換或重置 Agent 工作目錄\n\n" +
 			"/stop\n  停止當前執行\n\n" +
 			"/cron [add|list|exec|del|enable|disable]\n  管理定時任務\n\n" +
@@ -1097,9 +1111,9 @@ var messages = map[MsgKey]map[Language]string{
 			"/doctor\n  執行系統診斷\n\n" +
 			"/usage\n  查看帳號/模型限額使用情況\n\n" +
 			"/upgrade\n  檢查更新並自動升級\n\n" +
-			"/restart\n  重啟 cc-connect 服務\n\n" +
+			"/restart\n  重啟 agent-connect 服務\n\n" +
 			"/status\n  查看系統狀態\n\n" +
-			"/version\n  查看 cc-connect 版本\n\n" +
+			"/version\n  查看 agent-connect 版本\n\n" +
 			"/whoami\n  查看你的 User ID（用於 allow_from / admin_from 設定）\n\n" +
 			"/help\n  顯示此說明\n\n" +
 			"提示：命令支持前綴匹配，如 `/pro l` = `/provider list`，`/sw 2` = `/switch 2`。\n\n" +
@@ -1125,6 +1139,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/compress\n  会話コンテキストを圧縮\n\n" +
 			"/tts [always|voice_only]\n  音声合成モードの表示/切り替え\n\n" +
 			"/shell [--timeout <秒>] <コマンド>\n  シェルコマンドを実行して結果を返す（ショートカット：!コマンド）\n\n" +
+			"/create-worktree <新規ブランチ> [ベースブランチ]\n  git worktree を作成し、setup.sh を実行してこのチャットで使用\n\n" +
 			"/dir [パス|reset]\n  エージェントの作業ディレクトリを表示/切り替え/リセット\n\n" +
 			"/stop\n  現在の実行を停止\n\n" +
 			"/cron [add|list|exec|del|enable|disable]\n  スケジュールタスク管理\n\n" +
@@ -1139,9 +1154,9 @@ var messages = map[MsgKey]map[Language]string{
 			"/doctor\n  システム診断を実行\n\n" +
 			"/usage\n  アカウント/モデル使用量を表示\n\n" +
 			"/upgrade\n  アップデートを確認して自動更新\n\n" +
-			"/restart\n  cc-connect サービスを再起動\n\n" +
+			"/restart\n  agent-connect サービスを再起動\n\n" +
 			"/status\n  システム状態を表示\n\n" +
-			"/version\n  cc-connect のバージョンを表示\n\n" +
+			"/version\n  agent-connect のバージョンを表示\n\n" +
 			"/whoami\n  あなたの User ID を表示（allow_from / admin_from 設定用）\n\n" +
 			"/help\n  このヘルプを表示\n\n" +
 			"ヒント：コマンドはプレフィックスマッチに対応しています。例: `/pro l` = `/provider list`、`/sw 2` = `/switch 2`。\n\n" +
@@ -1167,6 +1182,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/compress\n  Comprimir contexto de conversación\n\n" +
 			"/tts [always|voice_only]\n  Ver/cambiar modo de síntesis de voz\n\n" +
 			"/shell [--timeout <seg>] <comando>\n  Ejecutar un comando shell y devolver la salida (atajo: !comando)\n\n" +
+			"/create-worktree <nueva-rama> [rama-base]\n  Crear un git worktree, ejecutar setup.sh y usarlo para este chat\n\n" +
 			"/dir [ruta|reset]\n  Ver, cambiar o restablecer el directorio de trabajo del agente\n\n" +
 			"/stop\n  Detener ejecución actual\n\n" +
 			"/cron [add|list|exec|del|enable|disable]\n  Gestionar tareas programadas\n\n" +
@@ -1181,9 +1197,9 @@ var messages = map[MsgKey]map[Language]string{
 			"/doctor\n  Ejecutar diagnósticos del sistema\n\n" +
 			"/usage\n  Mostrar uso de cuota de cuenta/modelo\n\n" +
 			"/upgrade\n  Buscar actualizaciones y auto-actualizar\n\n" +
-			"/restart\n  Reiniciar el servicio cc-connect\n\n" +
+			"/restart\n  Reiniciar el servicio agent-connect\n\n" +
 			"/status\n  Mostrar estado del sistema\n\n" +
-			"/version\n  Mostrar versión de cc-connect\n\n" +
+			"/version\n  Mostrar versión de agent-connect\n\n" +
 			"/whoami\n  Mostrar tu User ID (para allow_from / admin_from)\n\n" +
 			"/help\n  Mostrar esta ayuda\n\n" +
 			"Consejo: Los comandos admiten coincidencia por prefijo, ej. `/pro l` = `/provider list`, `/sw 2` = `/switch 2`.\n\n" +
@@ -1193,11 +1209,11 @@ var messages = map[MsgKey]map[Language]string{
 			"Modos de permisos: default / edit / plan / yolo",
 	},
 	MsgHelpTitle: {
-		LangEnglish:            "cc-connect Help",
-		LangChinese:            "cc-connect 帮助",
-		LangTraditionalChinese: "cc-connect 說明",
-		LangJapanese:           "cc-connect ヘルプ",
-		LangSpanish:            "cc-connect Ayuda",
+		LangEnglish:            "agent-connect Help",
+		LangChinese:            "agent-connect 帮助",
+		LangTraditionalChinese: "agent-connect 說明",
+		LangJapanese:           "agent-connect ヘルプ",
+		LangSpanish:            "agent-connect Ayuda",
 	},
 	MsgHelpSessionSection: {
 		LangEnglish: "**Session Management**\n" +
@@ -1286,6 +1302,7 @@ var messages = map[MsgKey]map[Language]string{
 	MsgHelpToolsSection: {
 		LangEnglish: "**Tools & Automation**\n" +
 			"/shell <command> — Run a shell command (! shortcut)\n" +
+			"/create-worktree <new-branch> [base] — Create and use a git worktree\n" +
 			"/show <ref> — View file / directory / snippet by reference\n" +
 			"/dir [path|reset] — Show, switch, or reset work directory\n" +
 			"/cron [add|list|exec|del|...] — Scheduled tasks\n" +
@@ -1297,6 +1314,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/stop — Stop current execution",
 		LangChinese: "**工具与自动化**\n" +
 			"/shell <命令> — 执行 Shell 命令（!快捷方式）\n" +
+			"/create-worktree <新分支> [基准] — 创建并使用 git worktree\n" +
 			"/show <引用> — 按引用查看文件、目录或代码片段\n" +
 			"/dir [路径|reset] — 查看、切换或重置工作目录\n" +
 			"/cron [add|list|exec|del|...] — 定时任务\n" +
@@ -1308,6 +1326,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/stop — 停止当前执行",
 		LangTraditionalChinese: "**工具與自動化**\n" +
 			"/shell <命令> — 執行 Shell 命令（!快捷方式）\n" +
+			"/create-worktree <新分支> [基準] — 建立並使用 git worktree\n" +
 			"/show <引用> — 按引用查看檔案、目錄或程式碼片段\n" +
 			"/dir [路徑|reset] — 查看、切換或重置工作目錄\n" +
 			"/cron [add|list|exec|del|...] — 定時任務\n" +
@@ -1319,6 +1338,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/stop — 停止當前執行",
 		LangJapanese: "**ツール・自動化**\n" +
 			"/shell <コマンド> — シェルコマンド実行（!ショートカット）\n" +
+			"/create-worktree <新規ブランチ> [ベース] — git worktree を作成して使用\n" +
 			"/show <参照> — ファイル/ディレクトリ/スニペットを参照で表示\n" +
 			"/dir [パス|reset] — 作業ディレクトリの表示/切り替え/リセット\n" +
 			"/cron [add|list|exec|del|...] — スケジュールタスク\n" +
@@ -1330,6 +1350,7 @@ var messages = map[MsgKey]map[Language]string{
 			"/stop — 現在の実行を停止",
 		LangSpanish: "**Herramientas y automatización**\n" +
 			"/shell <comando> — Ejecutar comando shell (! atajo)\n" +
+			"/create-worktree <nueva-rama> [base] — Crear y usar un git worktree\n" +
 			"/show <ref> — Ver archivo/directorio/fragmento por referencia\n" +
 			"/dir [ruta|reset] — Ver, cambiar o restablecer directorio de trabajo\n" +
 			"/cron [add|list|exec|del|...] — Tareas programadas\n" +
@@ -1479,11 +1500,11 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "Este agente no soporta el cambio de proveedor.",
 	},
 	MsgProviderNone: {
-		LangEnglish:            "No provider configured. Using agent's default environment.\n\nAdd providers in `config.toml` or via `cc-connect provider add`.",
-		LangChinese:            "未配置 Provider，使用 Agent 默认环境。\n\n可在 `config.toml` 中添加或使用 `cc-connect provider add` 命令。",
-		LangTraditionalChinese: "未配置 Provider，使用 Agent 預設環境。\n\n可在 `config.toml` 中新增或使用 `cc-connect provider add` 命令。",
-		LangJapanese:           "プロバイダが設定されていません。エージェントのデフォルト環境を使用します。\n\n`config.toml` または `cc-connect provider add` でプロバイダを追加してください。",
-		LangSpanish:            "No hay proveedor configurado. Usando el entorno predeterminado del agente.\n\nAgregue proveedores en `config.toml` o mediante `cc-connect provider add`.",
+		LangEnglish:            "No provider configured. Using agent's default environment.\n\nAdd providers in `config.toml` or via `agent-connect provider add`.",
+		LangChinese:            "未配置 Provider，使用 Agent 默认环境。\n\n可在 `config.toml` 中添加或使用 `agent-connect provider add` 命令。",
+		LangTraditionalChinese: "未配置 Provider，使用 Agent 預設環境。\n\n可在 `config.toml` 中新增或使用 `agent-connect provider add` 命令。",
+		LangJapanese:           "プロバイダが設定されていません。エージェントのデフォルト環境を使用します。\n\n`config.toml` または `agent-connect provider add` でプロバイダを追加してください。",
+		LangSpanish:            "No hay proveedor configurado. Usando el entorno predeterminado del agente.\n\nAgregue proveedores en `config.toml` o mediante `agent-connect provider add`.",
 	},
 	MsgProviderCurrent: {
 		LangEnglish:            "📡 Active provider: **%s**\n\nUse `/provider list` to see all, `/provider switch <name>` to switch.",
@@ -1500,11 +1521,11 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "📡 Proveedores\n\n",
 	},
 	MsgProviderListEmpty: {
-		LangEnglish:            "No providers configured.\n\nAdd providers in `config.toml` or via `cc-connect provider add`.",
-		LangChinese:            "未配置 Provider。\n\n可在 `config.toml` 中添加或使用 `cc-connect provider add` 命令。",
-		LangTraditionalChinese: "未配置 Provider。\n\n可在 `config.toml` 中新增或使用 `cc-connect provider add` 命令。",
-		LangJapanese:           "プロバイダが設定されていません。\n\n`config.toml` または `cc-connect provider add` で追加してください。",
-		LangSpanish:            "No hay proveedores configurados.\n\nAgregue proveedores en `config.toml` o mediante `cc-connect provider add`.",
+		LangEnglish:            "No providers configured.\n\nAdd providers in `config.toml` or via `agent-connect provider add`.",
+		LangChinese:            "未配置 Provider。\n\n可在 `config.toml` 中添加或使用 `agent-connect provider add` 命令。",
+		LangTraditionalChinese: "未配置 Provider。\n\n可在 `config.toml` 中新增或使用 `agent-connect provider add` 命令。",
+		LangJapanese:           "プロバイダが設定されていません。\n\n`config.toml` または `agent-connect provider add` で追加してください。",
+		LangSpanish:            "No hay proveedores configurados.\n\nAgregue proveedores en `config.toml` o mediante `agent-connect provider add`.",
 	},
 	MsgProviderSwitchHint: {
 		LangEnglish:            "`/provider switch <name>` to switch | `/provider clear` to reset",
@@ -1805,11 +1826,11 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "El programador de tareas no está disponible.",
 	},
 	MsgCronUsage: {
-		LangEnglish:            "Usage:\n/cron add <min> <hour> <day> <month> <weekday> <prompt>\n/cron list\n/cron exec <id>\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id>\n/cron setup — write cc-connect instructions to agent memory file",
-		LangChinese:            "用法：\n/cron add <分> <时> <日> <月> <周> <任务描述>\n/cron list\n/cron exec <id> 立即执行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> 静音/取消静音\n/cron setup — 将 cc-connect 指令写入 agent 记忆文件",
-		LangTraditionalChinese: "用法：\n/cron add <分> <時> <日> <月> <週> <任務描述>\n/cron list\n/cron exec <id> 立即執行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> 靜音/取消靜音\n/cron setup — 將 cc-connect 指令寫入 agent 記憶檔案",
-		LangJapanese:           "使い方:\n/cron add <分> <時> <日> <月> <曜日> <タスク内容>\n/cron list\n/cron exec <id> 今すぐ実行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> ミュート/解除\n/cron setup — cc-connect の指示をエージェントのメモリファイルに書き込む",
-		LangSpanish:            "Uso:\n/cron add <min> <hora> <día> <mes> <día_semana> <tarea>\n/cron list\n/cron exec <id>\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id>\n/cron setup — escribir las instrucciones de cc-connect en el archivo de memoria del agente",
+		LangEnglish:            "Usage:\n/cron add <min> <hour> <day> <month> <weekday> <prompt>\n/cron list\n/cron exec <id>\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id>\n/cron setup — write agent-connect instructions to agent memory file",
+		LangChinese:            "用法：\n/cron add <分> <时> <日> <月> <周> <任务描述>\n/cron list\n/cron exec <id> 立即执行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> 静音/取消静音\n/cron setup — 将 agent-connect 指令写入 agent 记忆文件",
+		LangTraditionalChinese: "用法：\n/cron add <分> <時> <日> <月> <週> <任務描述>\n/cron list\n/cron exec <id> 立即執行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> 靜音/取消靜音\n/cron setup — 將 agent-connect 指令寫入 agent 記憶檔案",
+		LangJapanese:           "使い方:\n/cron add <分> <時> <日> <月> <曜日> <タスク内容>\n/cron list\n/cron exec <id> 今すぐ実行\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id> ミュート/解除\n/cron setup — agent-connect の指示をエージェントのメモリファイルに書き込む",
+		LangSpanish:            "Uso:\n/cron add <min> <hora> <día> <mes> <día_semana> <tarea>\n/cron list\n/cron exec <id>\n/cron del <id>\n/cron enable <id> · /cron disable <id>\n/cron mute <id> · /cron unmute <id>\n/cron setup — escribir las instrucciones de agent-connect en el archivo de memoria del agente",
 	},
 	MsgCronAddUsage: {
 		LangEnglish:            "Usage: /cron add <min> <hour> <day> <month> <weekday> <prompt>\nExample: /cron add 0 6 * * * Collect GitHub trending data and send me a summary",
@@ -2146,7 +2167,7 @@ var messages = map[MsgKey]map[Language]string{
 	},
 
 	MsgStatusTitle: {
-		LangEnglish: "cc-connect Status\n\n" +
+		LangEnglish: "agent-connect Status\n\n" +
 			"Project: %s\n" +
 			"Agent: %s\n" +
 			"Work Dir: %s\n" +
@@ -2154,7 +2175,7 @@ var messages = map[MsgKey]map[Language]string{
 			"Uptime: %s\n" +
 			"Language: %s\n" +
 			"%s" + "%s" + "%s" + "%s" + "%s" + "%s",
-		LangChinese: "cc-connect 状态\n\n" +
+		LangChinese: "agent-connect 状态\n\n" +
 			"项目: %s\n" +
 			"Agent: %s\n" +
 			"工作目录: %s\n" +
@@ -2162,7 +2183,7 @@ var messages = map[MsgKey]map[Language]string{
 			"运行时间: %s\n" +
 			"语言: %s\n" +
 			"%s" + "%s" + "%s" + "%s" + "%s" + "%s",
-		LangTraditionalChinese: "cc-connect 狀態\n\n" +
+		LangTraditionalChinese: "agent-connect 狀態\n\n" +
 			"項目: %s\n" +
 			"Agent: %s\n" +
 			"工作目錄: %s\n" +
@@ -2170,7 +2191,7 @@ var messages = map[MsgKey]map[Language]string{
 			"運行時間: %s\n" +
 			"語言: %s\n" +
 			"%s" + "%s" + "%s" + "%s" + "%s" + "%s",
-		LangJapanese: "cc-connect ステータス\n\n" +
+		LangJapanese: "agent-connect ステータス\n\n" +
 			"プロジェクト: %s\n" +
 			"エージェント: %s\n" +
 			"作業ディレクトリ: %s\n" +
@@ -2178,7 +2199,7 @@ var messages = map[MsgKey]map[Language]string{
 			"稼働時間: %s\n" +
 			"言語: %s\n" +
 			"%s" + "%s" + "%s" + "%s" + "%s" + "%s",
-		LangSpanish: "Estado de cc-connect\n\n" +
+		LangSpanish: "Estado de agent-connect\n\n" +
 			"Proyecto: %s\n" +
 			"Agente: %s\n" +
 			"Directorio: %s\n" +
@@ -2533,8 +2554,8 @@ var messages = map[MsgKey]map[Language]string{
 		LangJapanese: "次へ →", LangSpanish: "Siguiente →",
 	},
 	MsgCardTitleStatus: {
-		LangEnglish: "cc-connect Status", LangChinese: "cc-connect 状态", LangTraditionalChinese: "cc-connect 狀態",
-		LangJapanese: "cc-connect ステータス", LangSpanish: "Estado de cc-connect",
+		LangEnglish: "agent-connect Status", LangChinese: "agent-connect 状态", LangTraditionalChinese: "agent-connect 狀態",
+		LangJapanese: "agent-connect ステータス", LangSpanish: "Estado de agent-connect",
 	},
 	MsgCardTitleLanguage: {
 		LangEnglish: "Language", LangChinese: "语言", LangTraditionalChinese: "語言",
@@ -2973,18 +2994,18 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "\n✅ %d aprobados  ⚠️ %d advertencias  ❌ %d fallidos",
 	},
 	MsgRestarting: {
-		LangEnglish:            "🔄 Restarting cc-connect...",
-		LangChinese:            "🔄 正在重启 cc-connect...",
-		LangTraditionalChinese: "🔄 正在重啟 cc-connect...",
-		LangJapanese:           "🔄 cc-connect を再起動中...",
-		LangSpanish:            "🔄 Reiniciando cc-connect...",
+		LangEnglish:            "🔄 Restarting agent-connect...",
+		LangChinese:            "🔄 正在重启 agent-connect...",
+		LangTraditionalChinese: "🔄 正在重啟 agent-connect...",
+		LangJapanese:           "🔄 agent-connect を再起動中...",
+		LangSpanish:            "🔄 Reiniciando agent-connect...",
 	},
 	MsgRestartSuccess: {
-		LangEnglish:            "✅ cc-connect restarted successfully.",
-		LangChinese:            "✅ cc-connect 重启成功。",
-		LangTraditionalChinese: "✅ cc-connect 重啟成功。",
-		LangJapanese:           "✅ cc-connect の再起動が完了しました。",
-		LangSpanish:            "✅ cc-connect se reinició correctamente.",
+		LangEnglish:            "✅ agent-connect restarted successfully.",
+		LangChinese:            "✅ agent-connect 重启成功。",
+		LangTraditionalChinese: "✅ agent-connect 重啟成功。",
+		LangJapanese:           "✅ agent-connect の再起動が完了しました。",
+		LangSpanish:            "✅ agent-connect se reinició correctamente.",
 	},
 	MsgUpgradeChecking: {
 		LangEnglish:            "🔍 Checking for updates...",
@@ -3462,25 +3483,25 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "✅ ¡Enlace exitoso! Grupo actual: %s\n\nAhora puede pedir a este bot que consulte a %s.\nEjemplo: \"Pregunta a %s sobre ...\"",
 	},
 	MsgRelaySetupHint: {
-		LangEnglish:            "\n\n⚠️ This agent does not auto-inject cc-connect instructions.\nPlease run `/bind setup` or `/cron setup` to write instructions to %s.",
-		LangChinese:            "\n\n⚠️ 当前 agent 不会自动注入 cc-connect 指令。\n请运行 `/bind setup` 或 `/cron setup` 将指令写入 %s。",
-		LangTraditionalChinese: "\n\n⚠️ 當前 agent 不會自動注入 cc-connect 指令。\n請執行 `/bind setup` 或 `/cron setup` 將指令寫入 %s。",
-		LangJapanese:           "\n\n⚠️ このエージェントは cc-connect の指示を自動注入しません。\n`/bind setup` または `/cron setup` を実行して %s に指示を書き込んでください。",
-		LangSpanish:            "\n\n⚠️ Este agente no inyecta automáticamente las instrucciones de cc-connect.\nEjecute `/bind setup` o `/cron setup` para escribirlas en %s.",
+		LangEnglish:            "\n\n⚠️ This agent does not auto-inject agent-connect instructions.\nPlease run `/bind setup` or `/cron setup` to write instructions to %s.",
+		LangChinese:            "\n\n⚠️ 当前 agent 不会自动注入 agent-connect 指令。\n请运行 `/bind setup` 或 `/cron setup` 将指令写入 %s。",
+		LangTraditionalChinese: "\n\n⚠️ 當前 agent 不會自動注入 agent-connect 指令。\n請執行 `/bind setup` 或 `/cron setup` 將指令寫入 %s。",
+		LangJapanese:           "\n\n⚠️ このエージェントは agent-connect の指示を自動注入しません。\n`/bind setup` または `/cron setup` を実行して %s に指示を書き込んでください。",
+		LangSpanish:            "\n\n⚠️ Este agente no inyecta automáticamente las instrucciones de agent-connect.\nEjecute `/bind setup` o `/cron setup` para escribirlas en %s.",
 	},
 	MsgRelaySetupOK: {
-		LangEnglish:            "✅ cc-connect instructions written to %s\nThe agent can now use relay, cron, and attachment send-back.",
-		LangChinese:            "✅ cc-connect 指令已写入 %s\nagent 现在可以使用中继、定时任务和附件回传功能了。",
-		LangTraditionalChinese: "✅ cc-connect 指令已寫入 %s\nagent 現在可以使用中繼、定時任務和附件回傳功能了。",
-		LangJapanese:           "✅ cc-connect の指示を %s に書き込みました。\nエージェントがリレー、cron、添付ファイル返送を使えるようになりました。",
-		LangSpanish:            "✅ Instrucciones de cc-connect escritas en %s\nEl agente ahora puede usar relay, cron y reenvío de adjuntos.",
+		LangEnglish:            "✅ agent-connect instructions written to %s\nThe agent can now use relay, cron, and attachment send-back.",
+		LangChinese:            "✅ agent-connect 指令已写入 %s\nagent 现在可以使用中继、定时任务和附件回传功能了。",
+		LangTraditionalChinese: "✅ agent-connect 指令已寫入 %s\nagent 現在可以使用中繼、定時任務和附件回傳功能了。",
+		LangJapanese:           "✅ agent-connect の指示を %s に書き込みました。\nエージェントがリレー、cron、添付ファイル返送を使えるようになりました。",
+		LangSpanish:            "✅ Instrucciones de agent-connect escritas en %s\nEl agente ahora puede usar relay, cron y reenvío de adjuntos.",
 	},
 	MsgRelaySetupExists: {
-		LangEnglish:            "ℹ️ cc-connect instructions already exist in %s — no changes made.",
-		LangChinese:            "ℹ️ cc-connect 指令已存在于 %s 中，无需重复写入。",
-		LangTraditionalChinese: "ℹ️ cc-connect 指令已存在於 %s 中，無需重複寫入。",
-		LangJapanese:           "ℹ️ cc-connect の指示は既に %s に存在します。変更はありません。",
-		LangSpanish:            "ℹ️ Las instrucciones de cc-connect ya existen en %s — sin cambios.",
+		LangEnglish:            "ℹ️ agent-connect instructions already exist in %s — no changes made.",
+		LangChinese:            "ℹ️ agent-connect 指令已存在于 %s 中，无需重复写入。",
+		LangTraditionalChinese: "ℹ️ agent-connect 指令已存在於 %s 中，無需重複寫入。",
+		LangJapanese:           "ℹ️ agent-connect の指示は既に %s に存在します。変更はありません。",
+		LangSpanish:            "ℹ️ Las instrucciones de agent-connect ya existen en %s — sin cambios.",
 	},
 	MsgRelaySetupNoMemory: {
 		LangEnglish:            "❌ This agent does not support instruction files.",
@@ -3490,18 +3511,18 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "❌ Este agente no soporta archivos de instrucciones.",
 	},
 	MsgSetupNative: {
-		LangEnglish:            "✅ This agent natively supports cc-connect instructions — no setup needed.",
-		LangChinese:            "✅ 当前 agent 已原生支持 cc-connect 指令，无需额外配置。",
-		LangTraditionalChinese: "✅ 當前 agent 已原生支持 cc-connect 指令，無需額外配置。",
-		LangJapanese:           "✅ このエージェントは cc-connect の指示をネイティブサポートしています。セットアップ不要です。",
-		LangSpanish:            "✅ Este agente soporta nativamente las instrucciones de cc-connect — no se necesita configuración.",
+		LangEnglish:            "✅ This agent natively supports agent-connect instructions — no setup needed.",
+		LangChinese:            "✅ 当前 agent 已原生支持 agent-connect 指令，无需额外配置。",
+		LangTraditionalChinese: "✅ 當前 agent 已原生支持 agent-connect 指令，無需額外配置。",
+		LangJapanese:           "✅ このエージェントは agent-connect の指示をネイティブサポートしています。セットアップ不要です。",
+		LangSpanish:            "✅ Este agente soporta nativamente las instrucciones de agent-connect — no se necesita configuración.",
 	},
 	MsgCronSetupOK: {
-		LangEnglish:            "✅ cc-connect instructions written to %s\nThe agent can now use relay, cron, and attachment send-back.",
-		LangChinese:            "✅ cc-connect 指令已写入 %s\nagent 现在可以使用中继、定时任务和附件回传功能了。",
-		LangTraditionalChinese: "✅ cc-connect 指令已寫入 %s\nagent 現在可以使用中繼、定時任務和附件回傳功能了。",
-		LangJapanese:           "✅ cc-connect の指示を %s に書き込みました。\nエージェントがリレー、cron、添付ファイル返送を使えるようになりました。",
-		LangSpanish:            "✅ Instrucciones de cc-connect escritas en %s\nEl agente ahora puede usar relay, cron y reenvío de adjuntos.",
+		LangEnglish:            "✅ agent-connect instructions written to %s\nThe agent can now use relay, cron, and attachment send-back.",
+		LangChinese:            "✅ agent-connect 指令已写入 %s\nagent 现在可以使用中继、定时任务和附件回传功能了。",
+		LangTraditionalChinese: "✅ agent-connect 指令已寫入 %s\nagent 現在可以使用中繼、定時任務和附件回傳功能了。",
+		LangJapanese:           "✅ agent-connect の指示を %s に書き込みました。\nエージェントがリレー、cron、添付ファイル返送を使えるようになりました。",
+		LangSpanish:            "✅ Instrucciones de agent-connect escritas en %s\nEl agente ahora puede usar relay, cron y reenvío de adjuntos.",
 	},
 	MsgSearchUsage: {
 		LangEnglish:            "Usage: /search <keyword>\nSearch sessions by name or ID.",
@@ -3715,11 +3736,11 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "Buscar actualizaciones y auto-actualizar",
 	},
 	MsgBuiltinCmdRestart: {
-		LangEnglish:            "Restart cc-connect service",
-		LangChinese:            "重启 cc-connect 服务",
-		LangTraditionalChinese: "重啟 cc-connect 服務",
-		LangJapanese:           "cc-connect サービスを再起動",
-		LangSpanish:            "Reiniciar el servicio cc-connect",
+		LangEnglish:            "Restart agent-connect service",
+		LangChinese:            "重启 agent-connect 服务",
+		LangTraditionalChinese: "重啟 agent-connect 服務",
+		LangJapanese:           "agent-connect サービスを再起動",
+		LangSpanish:            "Reiniciar el servicio agent-connect",
 	},
 	MsgBuiltinCmdStatus: {
 		LangEnglish:            "Show system status",
@@ -3736,11 +3757,11 @@ var messages = map[MsgKey]map[Language]string{
 		LangSpanish:            "Mostrar uso de cuota de cuenta/modelo",
 	},
 	MsgBuiltinCmdVersion: {
-		LangEnglish:            "Show cc-connect version",
-		LangChinese:            "查看 cc-connect 版本",
-		LangTraditionalChinese: "查看 cc-connect 版本",
-		LangJapanese:           "cc-connect のバージョンを表示",
-		LangSpanish:            "Mostrar versión de cc-connect",
+		LangEnglish:            "Show agent-connect version",
+		LangChinese:            "查看 agent-connect 版本",
+		LangTraditionalChinese: "查看 agent-connect 版本",
+		LangJapanese:           "agent-connect のバージョンを表示",
+		LangSpanish:            "Mostrar versión de agent-connect",
 	},
 	MsgBuiltinCmdHelp: {
 		LangEnglish:            "Show this help",
@@ -3762,6 +3783,13 @@ var messages = map[MsgKey]map[Language]string{
 		LangTraditionalChinese: "執行 Shell 命令，參數: <命令>",
 		LangJapanese:           "シェルコマンドを実行、引数: <コマンド>",
 		LangSpanish:            "Ejecutar un comando shell, arg: <comando>",
+	},
+	MsgBuiltinCmdWorktree: {
+		LangEnglish:            "Create a git worktree, arg: <new-branch> [base-branch]",
+		LangChinese:            "创建 git worktree，参数: <新分支> [基准分支]",
+		LangTraditionalChinese: "建立 git worktree，參數: <新分支> [基準分支]",
+		LangJapanese:           "git worktree を作成、引数: <新規ブランチ> [ベースブランチ]",
+		LangSpanish:            "Crear un git worktree, arg: <nueva-rama> [rama-base]",
 	},
 	MsgBuiltinCmdDir: {
 		LangEnglish:            "Show, switch, or reset agent working directory, arg: <path>",
@@ -3874,6 +3902,76 @@ var messages = map[MsgKey]map[Language]string{
 		LangTraditionalChinese: "❌ 沒有上一個目錄記錄。",
 		LangJapanese:           "❌ 前のディレクトリが履歴にありません。",
 		LangSpanish:            "❌ No hay directorio anterior en el historial.",
+	},
+	MsgCreateWorktreeUsage: {
+		LangEnglish:            "Usage: `/create-worktree <new-branch> [base-branch]`\nDefault base branch: `main`.",
+		LangChinese:            "用法: `/create-worktree <新分支> [基准分支]`\n默认基准分支: `main`。",
+		LangTraditionalChinese: "用法: `/create-worktree <新分支> [基準分支]`\n預設基準分支: `main`。",
+		LangJapanese:           "使い方: `/create-worktree <新規ブランチ> [ベースブランチ]`\n既定のベースブランチ: `main`。",
+		LangSpanish:            "Uso: `/create-worktree <nueva-rama> [rama-base]`\nRama base predeterminada: `main`.",
+	},
+	MsgCreateWorktreeStarted: {
+		LangEnglish:            "⏳ Creating worktree for `%s` from `%s`...",
+		LangChinese:            "⏳ 正在从 `%2$s` 创建 `%1$s` 的 worktree...",
+		LangTraditionalChinese: "⏳ 正在從 `%2$s` 建立 `%1$s` 的 worktree...",
+		LangJapanese:           "⏳ `%2$s` から `%1$s` の worktree を作成中...",
+		LangSpanish:            "⏳ Creando worktree para `%s` desde `%s`...",
+	},
+	MsgCreateWorktreeNotGit: {
+		LangEnglish:            "❌ Current work directory is not inside a git repository.\n%s",
+		LangChinese:            "❌ 当前工作目录不在 git 仓库内。\n%s",
+		LangTraditionalChinese: "❌ 當前工作目錄不在 git 倉庫內。\n%s",
+		LangJapanese:           "❌ 現在の作業ディレクトリは git リポジトリ内ではありません。\n%s",
+		LangSpanish:            "❌ El directorio de trabajo actual no está dentro de un repositorio git.\n%s",
+	},
+	MsgCreateWorktreeExists: {
+		LangEnglish:            "❌ Worktree path already exists: `%s`",
+		LangChinese:            "❌ worktree 路径已存在: `%s`",
+		LangTraditionalChinese: "❌ worktree 路徑已存在: `%s`",
+		LangJapanese:           "❌ worktree パスは既に存在します: `%s`",
+		LangSpanish:            "❌ La ruta del worktree ya existe: `%s`",
+	},
+	MsgCreateWorktreeGitFailed: {
+		LangEnglish:            "❌ Failed to create git worktree:\n```\n%s\n```",
+		LangChinese:            "❌ 创建 git worktree 失败:\n```\n%s\n```",
+		LangTraditionalChinese: "❌ 建立 git worktree 失敗:\n```\n%s\n```",
+		LangJapanese:           "❌ git worktree の作成に失敗しました:\n```\n%s\n```",
+		LangSpanish:            "❌ No se pudo crear el git worktree:\n```\n%s\n```",
+	},
+	MsgCreateWorktreeSetupMissing: {
+		LangEnglish:            "setup.sh not found, skipped",
+		LangChinese:            "未找到 setup.sh，已跳过",
+		LangTraditionalChinese: "未找到 setup.sh，已略過",
+		LangJapanese:           "setup.sh が見つからないためスキップしました",
+		LangSpanish:            "setup.sh no encontrado, omitido",
+	},
+	MsgCreateWorktreeSetupDone: {
+		LangEnglish:            "setup.sh completed",
+		LangChinese:            "setup.sh 已完成",
+		LangTraditionalChinese: "setup.sh 已完成",
+		LangJapanese:           "setup.sh が完了しました",
+		LangSpanish:            "setup.sh completado",
+	},
+	MsgCreateWorktreeSetupFailed: {
+		LangEnglish:            "❌ Worktree created at `%s`, but setup.sh failed:\n```\n%s\n```",
+		LangChinese:            "❌ worktree 已创建在 `%s`，但 setup.sh 执行失败:\n```\n%s\n```",
+		LangTraditionalChinese: "❌ worktree 已建立在 `%s`，但 setup.sh 執行失敗:\n```\n%s\n```",
+		LangJapanese:           "❌ worktree は `%s` に作成されましたが、setup.sh が失敗しました:\n```\n%s\n```",
+		LangSpanish:            "❌ Worktree creado en `%s`, pero setup.sh falló:\n```\n%s\n```",
+	},
+	MsgCreateWorktreeSwitchFailed: {
+		LangEnglish:            "❌ Worktree created, but failed to switch this chat to it: %v",
+		LangChinese:            "❌ worktree 已创建，但当前会话切换失败: %v",
+		LangTraditionalChinese: "❌ worktree 已建立，但當前會話切換失敗: %v",
+		LangJapanese:           "❌ worktree は作成されましたが、このチャットの切り替えに失敗しました: %v",
+		LangSpanish:            "❌ Worktree creado, pero no se pudo cambiar este chat: %v",
+	},
+	MsgCreateWorktreeSuccess: {
+		LangEnglish:            "✅ Worktree ready\nBranch: `%s`\nPath: `%s`\nSetup: %s\nThis chat now uses that worktree.",
+		LangChinese:            "✅ Worktree 已就绪\n分支: `%s`\n路径: `%s`\nSetup: %s\n当前会话之后会使用这个 worktree。",
+		LangTraditionalChinese: "✅ Worktree 已就緒\n分支: `%s`\n路徑: `%s`\nSetup: %s\n當前會話之後會使用這個 worktree。",
+		LangJapanese:           "✅ Worktree の準備ができました\nブランチ: `%s`\nパス: `%s`\nSetup: %s\nこのチャットは以後この worktree を使用します。",
+		LangSpanish:            "✅ Worktree listo\nRama: `%s`\nRuta: `%s`\nSetup: %s\nEste chat ahora usa ese worktree.",
 	},
 	MsgDirCardTitle: {
 		LangEnglish:            "Working directory",

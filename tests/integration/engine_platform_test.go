@@ -1,6 +1,6 @@
 //go:build integration
 
-// Package integration contains integration tests for cc-connect.
+// Package integration contains integration tests for agent-connect.
 // These tests verify component interactions and require specific setup.
 // Run with: go test -tags=integration ./tests/integration/...
 package integration

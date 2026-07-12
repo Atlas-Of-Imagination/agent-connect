@@ -3,7 +3,7 @@
 // Package p1 contains P1 blackbox tests.
 //
 // Session commands (/help, /current, /name, /switch, /delete, /status, /version)
-// are dispatched by cc-connect's engine directly, so they respond within
+// are dispatched by agent-connect's engine directly, so they respond within
 // seconds regardless of agent speed.
 //
 // Run:

@@ -349,7 +349,7 @@ func TestP2_86_HideReplyFooter_ClaudeCode(t *testing.T) {
 
 // TestP1_40_FilterExternalSessionsDefault verifies that the default behavior
 // (filter_external_sessions=false) shows ALL sessions including any created
-// externally (not via cc-connect).
+// externally (not via agent-connect).
 //
 // Since our MockPlatform tests don't have external sessions, we verify that
 // the flag doesn't hide sessions WE created.
