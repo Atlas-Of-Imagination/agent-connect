@@ -36,7 +36,7 @@ var (
 var globalAPIServer *core.APIServer
 
 // defaultResetOnIdleMins is applied when a project does not set
-// reset_on_idle_mins. After this many minutes of user inactivity, cc-connect
+// reset_on_idle_mins. After this many minutes of user inactivity, agent-connect
 // rotates to a fresh session for the next message instead of resuming the
 // previous transcript via --continue. This avoids "context drift" where stale
 // chat history (failed commands, debugging noise, abandoned tangents) is
@@ -307,11 +307,11 @@ func main() {
 	}
 
 	if *showVersion {
-		fmt.Printf("cc-connect %s\ncommit:  %s\nbuilt:   %s\n", version, commit, buildTime)
+		fmt.Printf("agent-connect %s\ncommit:  %s\nbuilt:   %s\n", version, commit, buildTime)
 		return
 	}
 
-	core.VersionInfo = fmt.Sprintf("cc-connect %s\ncommit: %s\nbuilt: %s", version, commit, buildTime)
+	core.VersionInfo = fmt.Sprintf("agent-connect %s\ncommit: %s\nbuilt: %s", version, commit, buildTime)
 	core.CurrentVersion = version
 	core.CurrentCommit = commit
 	core.CurrentBuildTime = buildTime
@@ -340,7 +340,7 @@ func main() {
 			os.Exit(1)
 		}
 		fmt.Printf("Created default config at %s\n", configPath)
-		fmt.Println("Please edit this file to add your agent and platform credentials, then run cc-connect again.")
+		fmt.Println("Please edit this file to add your agent and platform credentials, then run agent-connect again.")
 		os.Exit(0)
 	}
 
@@ -356,7 +356,7 @@ func main() {
 	if len(cfg.Projects) == 0 {
 		fmt.Fprintf(os.Stderr, "Error: no projects configured in %s\n", configPath)
 		fmt.Fprintln(os.Stderr, "Add at least one [[project]] section to your config.toml, or run:")
-		fmt.Fprintln(os.Stderr, "  cc-connect init")
+		fmt.Fprintln(os.Stderr, "  agent-connect init")
 		os.Exit(1)
 	}
 
@@ -735,10 +735,9 @@ func main() {
 			}
 		}
 
-		// Wire sender injection
-		if proj.InjectSender != nil {
-			engine.SetInjectSender(*proj.InjectSender)
-		}
+		// Wire sender injection. Feishu/Lark default this on so shared group
+		// sessions can distinguish who @mentioned the bot.
+		engine.SetInjectSender(config.EffectiveInjectSender(&proj))
 
 		// Wire speech-to-text if enabled
 		if cfg.Speech.Enabled {
@@ -1315,7 +1314,7 @@ func main() {
 		apiSrv.Start()
 	}
 
-	slog.Info("cc-connect is running", "projects", len(engines))
+	slog.Info("agent-connect is running", "projects", len(engines))
 
 	// After startup, check if we were restarted and queue the success
 	// notification. The engine dispatches it on the first OnPlatformReady
@@ -1487,7 +1486,7 @@ func resolveClaudeProjectDir(workDir string) string {
 		return ""
 	}
 	// Claude Code encodes paths by replacing os.PathSeparator with "-"
-	// e.g. /home/leigh/workspace/cc-connect -> -home-leigh-workspace-cc-connect
+	// e.g. /home/leigh/workspace/agent-connect -> -home-leigh-workspace-agent-connect
 	encoded := strings.ReplaceAll(workDir, string(os.PathSeparator), "-")
 	dir := filepath.Join(homeDir, ".claude", "projects", encoded)
 	if info, err := os.Stat(dir); err != nil || !info.IsDir() {
@@ -1516,8 +1515,8 @@ func bootstrapConfig(path string) error {
 		return err
 	}
 
-	const tmpl = `# cc-connect configuration
-# Docs: https://github.com/chenhg5/cc-connect
+	const tmpl = `# agent-connect configuration
+# Docs: https://github.com/chenhg5/agent-connect
 
 [log]
 level = "info"
@@ -1544,7 +1543,7 @@ app_id = "your-feishu-app-id"
 app_secret = "your-feishu-app-secret"
 
 # For more platforms (DingTalk, Telegram, Slack, Discord, LINE, WeChat Work)
-# see: https://github.com/chenhg5/cc-connect/blob/main/config.example.toml
+# see: https://github.com/chenhg5/agent-connect/blob/main/config.example.toml
 `
 	return os.WriteFile(path, []byte(tmpl), 0o644)
 }
@@ -1559,22 +1558,18 @@ func printUsage() {
 	updateHint := getUpdateHintIfAvailable()
 
 	fmt.Fprintf(os.Stderr, `
-                                              _
-  ___ ___        ___ ___  _ __  _ __   ___  ___| |_
- / __/ __|_____ / __/ _ \| '_ \| '_ \ / _ \/ __| __|
-| (_| (_|_____|  (_| (_) | | | | | | |  __/ (__| |_
- \___\__|      \___\___/|_| |_|_| |_|\___|\___|\__|  %s%s
+agent-connect %s%s
 
   Bridge your messaging platforms to local AI coding agents.
   Supports: Claude Code, Codex, Cursor, Gemini CLI, Qoder CLI, OpenCode
   Platforms: Feishu, Telegram, Slack, DingTalk, Discord, LINE, WeChat Work, Weixin, QQ, QQ Bot
 
-  GitHub:  https://github.com/chenhg5/cc-connect
-  Docs:    https://github.com/chenhg5/cc-connect/blob/main/INSTALL.md
+  GitHub:  https://github.com/chenhg5/agent-connect
+  Docs:    https://github.com/chenhg5/agent-connect/blob/main/INSTALL.md
 
 Usage:
-  cc-connect [flags]
-  cc-connect <command> [args]
+  agent-connect [flags]
+  agent-connect <command> [args]
 
 Flags:
   --config <path>    Path to config file (default: ./config.toml or ~/.cc-connect/config.toml)
@@ -1583,7 +1578,7 @@ Flags:
   --help             Show this help message
 
 Commands:
-  daemon             Manage cc-connect as a background service (systemd/launchd/schtasks)
+  daemon             Manage agent-connect as a background service (systemd/launchd/schtasks)
     install          Install and start the daemon service
     uninstall        Remove the daemon service
     start            Start the daemon
@@ -1636,18 +1631,18 @@ Commands:
   config-example     (deprecated: use 'config example' instead)
 
 Examples:
-  cc-connect                          Start with default config
-  cc-connect --config /path/to.toml   Start with a specific config file
-  cc-connect daemon install           Install as a system service
-  cc-connect daemon logs -f           Follow daemon logs
-  cc-connect send -m "hello"          Send a message to the active session
-  cc-connect cron list                List all scheduled tasks
-  cc-connect feishu setup             Setup Feishu/Lark bot credentials
-  cc-connect weixin setup             Setup Weixin (ilink) with QR or --token
-  cc-connect yuanbao setup            Setup Yuanbao bot with --token app_key:app_secret
-  cc-connect update                   Update to the latest version
-  cc-connect config format            Format the config file
-  cc-connect config example > c.toml  Save example config to a file
+  agent-connect                          Start with default config
+  agent-connect --config /path/to.toml   Start with a specific config file
+  agent-connect daemon install           Install as a system service
+  agent-connect daemon logs -f           Follow daemon logs
+  agent-connect send -m "hello"          Send a message to the active session
+  agent-connect cron list                List all scheduled tasks
+  agent-connect feishu setup             Setup Feishu/Lark bot credentials
+  agent-connect weixin setup             Setup Weixin (ilink) with QR or --token
+  agent-connect yuanbao setup            Setup Yuanbao bot with --token app_key:app_secret
+  agent-connect update                   Update to the latest version
+  agent-connect config format            Format the config file
+  agent-connect config example > c.toml  Save example config to a file
 
 `, v, updateHint)
 }
@@ -1767,7 +1762,7 @@ func reloadConfig(configPath, projName string, engine *core.Engine) (*core.Confi
 	}
 
 	// Reload sender injection
-	engine.SetInjectSender(proj.InjectSender != nil && *proj.InjectSender)
+	engine.SetInjectSender(config.EffectiveInjectSender(proj))
 
 	// Reload attachment send-back switch
 	engine.SetAttachmentSendEnabled(cfg.AttachmentSend != "off")

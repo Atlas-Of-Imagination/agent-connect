@@ -3,21 +3,21 @@
 ## Unreleased
 
 ### Added
-- **`agent_session_idle_timeout_mins`**: new per-project config option that closes an idle live agent process after a clean turn while preserving the cc-connect session and saved agent session ID. The next message starts a new agent process and resumes the same conversation. Set to `0` or leave unset to disable (#1338).
+- **`agent_session_idle_timeout_mins`**: new per-project config option that closes an idle live agent process after a clean turn while preserving the agent-connect session and saved agent session ID. The next message starts a new agent process and resumes the same conversation. Set to `0` or leave unset to disable (#1338).
 - **Reasonix agent**: new agent adapter for Reasonix multi-model coding agent, bridging via HTTP serve API (POST /submit, SSE /events, POST /approve). Supports default/yolo/plan permission modes, SSE auto-reconnect with backoff, and thinking accumulator. (#1281)
 - **cloud_web platform**: 新增 self-hosted IM Gateway 作为 first-class platform 接入 (CWIP v1 协议,支持 websocket / long_poll / gateway 3 种 transport,完整 inbound/outbound + capability negotiation + graceful degradation)。 详见 docs/cloud-web.md + #1282。
 
 ## Unreleased
 
 ### Added
-- **Feishu: outbound bot-to-bot @mention resolution** via new `mention_map` config option. Maps agent-friendly names (e.g. `BOT-A`) to Feishu open_ids so that when an agent writes `@BOT-A` in its reply, cc-connect converts it to a native Feishu `<at>` tag that triggers a real notification. Layered on top of `resolve_mentions` (group-member matching) with higher priority, so explicit config always wins (#1322).
+- **Feishu: outbound bot-to-bot @mention resolution** via new `mention_map` config option. Maps agent-friendly names (e.g. `BOT-A`) to Feishu open_ids so that when an agent writes `@BOT-A` in its reply, agent-connect converts it to a native Feishu `<at>` tag that triggers a real notification. Layered on top of `resolve_mentions` (group-member matching) with higher priority, so explicit config always wins (#1322).
 
 ### Fixed
 - **Feishu recall fallback probes**: throttle repeated active-message recall checks so long-running turns do not continuously call platform message APIs.
 - **Skill discovery depth-1 only**: skill scanning no longer recurses into subdirectories. Only `<skill_dir>/<name>/SKILL.md` is registered; nested SKILL.md files (e.g. inside `<name>/references/...`) are treated as skill assets and ignored, matching the Claude Code CLI convention. Previously, nested SKILL.md files leaked into platform command menus as phantom slash commands (101 leaked commands from `frontend-design` skill alone) (#1304).
 - **Feishu: tighter `@` mention detection in `SendWithStatusFooter` / `buildReplyContent`** — a bare `@` inside an email address, URL, or escaped character no longer false-positives as a mention. Mention detection now checks for the resolved `<at user_id="...">` tag instead of a substring match, so card rendering (and the notation-style status footer) is preserved for content that merely contains `@`. Real `@mentions` still force `MsgTypeText` so Feishu fires the mention event (#1322).
 - **feishu**: coalesce consecutive image messages from the same session into a single multi-image dispatch to fix first-image drop on batch sends (#1395). When the Feishu mobile client sends N images in quick succession, each image arrives as a separate `image` event with very close `create_time` values. Dispatching each immediately caused core/engine's `create_time` watermark (PR #1168) to drop the oldest image, so the agent only saw N-1 images. A per-session image buffer with a 150ms quiet window now merges the burst into one `core.Message` carrying all images, in send order. Single-image sends and quoted-image replies are unaffected.
-- **claudecode**: fix per-spawn system-prompt temp file EACCES under `run_as_user` (#1429). The per-spawn temp file written by `writeTempAppendPromptFile` (the 1% edge-case path used when the prompt has session-specific platform formatting or user `append_system_prompt`) inherited `os.CreateTemp`'s 0600 mode and was owned by the cc-connect process user (often root under systemd). When the agent was spawned under a different `run_as_user`, it could not read the file and exited before any prompt was loaded. The file is now `chmod 0o644` immediately after write, matching the shared `ensureSharedSystemPromptFile` path. Prompt content is non-secret (a superset of the already-shared base prompt), so 0644 is consistent with the shared file. Does not affect the shared-file path (already 0644 since #1376) or the daemon-mode path resolution (#1419).
+- **claudecode**: fix per-spawn system-prompt temp file EACCES under `run_as_user` (#1429). The per-spawn temp file written by `writeTempAppendPromptFile` (the 1% edge-case path used when the prompt has session-specific platform formatting or user `append_system_prompt`) inherited `os.CreateTemp`'s 0600 mode and was owned by the agent-connect process user (often root under systemd). When the agent was spawned under a different `run_as_user`, it could not read the file and exited before any prompt was loaded. The file is now `chmod 0o644` immediately after write, matching the shared `ensureSharedSystemPromptFile` path. Prompt content is non-secret (a superset of the already-shared base prompt), so 0644 is consistent with the shared file. Does not affect the shared-file path (already 0644 since #1376) or the daemon-mode path resolution (#1419).
 - **core**: queue post-restart notification and dispatch on platform ready (#1383). Previously `/restart` sent the success notification immediately after engine startup, racing the platform's async connect window (Telegram: ~2.6s). On a not-yet-ready platform the send was silently dropped at debug log level. The notify is now queued on the engine and dispatched when the target platform reaches `OnPlatformReady`, with bounded retry (3 attempts, 0/500/1500 ms backoff) on transient send failure. Failed sends log at warn level. A 10s safety timeout drops the notify with a warning if the target platform never reaches ready, so startup is never blocked indefinitely. Also covers Discord / Weixin / Matrix (other AsyncRecoverablePlatform implementations) for free.
 - **core**: `SaveFilesToDisk` / `AppendFileRefs` always emit absolute paths (#1459). When a user configured a relative `work_dir` (e.g. `~/project` or `.cc-connect`), `SaveFilesToDisk` joined relative paths into the attachments directory and the resulting paths were passed verbatim into the agent's prompt. The spawned agent process — typically run from a different cwd by the platform adapter — could not resolve them and silently dropped every attachment. `SaveFilesToDisk` now calls `filepath.Abs(workDir)` up front and falls back to the raw value on error, and `AppendFileRefs` defensively absolutizes each entry. Both behaviors are covered by new tests for relative, absolute, and empty workDir; the empty-workDir case falls back to the process cwd so misconfigured deploys still get a writable attachments directory.
 
@@ -80,9 +80,9 @@ to affect existing configs:**
 
 ### Upgrade
 ```bash
-npm i -g cc-connect@1.3.3
+npm i -g agent-connect@1.3.3
 # or
-go install github.com/chenhg5/cc-connect/cmd/cc-connect@v1.3.3
+go install github.com/chenhg5/agent-connect/cmd/agent-connect@v1.3.3
 ```
 
 Coming from a `v1.3.3-beta.*`: this is a small fix-only upgrade. No config change
@@ -213,7 +213,7 @@ Beta release with new agents, new features, and broad platform fixes. No breakin
 - **Message queue depth configurable**: new `[queue] max_depth` config option (default 5) (#690)
 - **Claude Code opus[1m]**: add 1M-context Opus model option with shorthand descriptions (#660)
 - **QQ Bot file send/receive**: full file attachment support with robustness checks (#685)
-- **Bridge ImageSender/FileSender**: `cc-connect send --image/--file` now works through bridge protocol (#712)
+- **Bridge ImageSender/FileSender**: `agent-connect send --image/--file` now works through bridge protocol (#712)
 - **Provider presets**: add NekoCode, VisionCoder, and AIHubMix to provider presets; add Trae CLI ACP and COCO ACP config examples (#739)
 
 ### Fixed
@@ -246,7 +246,7 @@ Thanks to all contributors who made this release possible:
 Hotfix release: session filtering is now configurable and defaults to showing all sessions.
 
 ### Fixed
-- **`/list` shows all sessions by default**: the session filter introduced in v1.3.0 (which hid sessions not created by cc-connect) was accidentally merged and caused confusion. The filter is now **off by default** — `/list`, `/switch`, and `/delete` show all agent sessions regardless of origin.
+- **`/list` shows all sessions by default**: the session filter introduced in v1.3.0 (which hid sessions not created by agent-connect) was accidentally merged and caused confusion. The filter is now **off by default** — `/list`, `/switch`, and `/delete` show all agent sessions regardless of origin.
 
 ### Added
 - **`filter_external_sessions` config option**: users who *do* want to hide externally-created sessions can set `filter_external_sessions = true` in `[[projects]]` to restore the old filtering behavior.
@@ -274,13 +274,13 @@ First stable release of the 1.3 series. 555 commits since v1.2.1 with major new 
 
 ### Highlights
 
-- **Web Admin UI** — Full management dashboard embedded in the binary via `go:embed`. Project CRUD, session monitoring, cron editor, provider management, chat interface, and i18n (en/zh/zh-TW/ja/es). Use `cc-connect web` to open directly in the browser with auto-login.
+- **Web Admin UI** — Full management dashboard embedded in the binary via `go:embed`. Project CRUD, session monitoring, cron editor, provider management, chat interface, and i18n (en/zh/zh-TW/ja/es). Use `agent-connect web` to open directly in the browser with auto-login.
 - **Lifecycle Event Hooks** — New `[[hooks]]` config to trigger shell commands or HTTP webhooks on 7 event types: `message.received`, `message.sent`, `session.started`, `session.ended`, `cron.triggered`, `permission.requested`, `error`. Async by default, fail-open, non-blocking.
 - **Skill Management** — New `/skills` page in the web UI with local skill browser (per-project, per-agent) and recommended skill presets fetched from remote.
 - **Global Provider Management** — Add, edit, delete providers in the web UI; import from cc-switch config; per-agent-type provider presets with featured/star badges.
 
 ### New Features
-- `cc-connect web` CLI command: auto-configure web admin, open browser with token-based login
+- `agent-connect web` CLI command: auto-configure web admin, open browser with token-based login
 - Feishu: auto-resolve `@name` mentions to clickable at-tags (`resolve_mentions` config)
 - Feishu: multi-level reply chain recognition; done-emoji reaction after streaming
 - Feishu: configurable progress display styles (compact/card)
@@ -305,7 +305,7 @@ First stable release of the 1.3 series. 555 commits since v1.2.1 with major new 
 - Fix Gemini image handling: save to workspace, prompt-based file references
 - Fix Claude Code: unblock readLoop when child subprocesses hold stdout pipe
 - Fix Codex: multiline prompt on resume; force-kill process group on stop
-- Fix core: race condition during session cleanup; follow symlinked skill directories; persist agent_session_id; filter `/list` to cc-connect owned sessions
+- Fix core: race condition during session cleanup; follow symlinked skill directories; persist agent_session_id; filter `/list` to agent-connect owned sessions
 - Fix Feishu: slash commands in thread/reply context; user/chat name resolution in async goroutine
 - Fix Telegram: UTF-8-safe command menu descriptions
 - Fix TTS: don't send empty language_type to Qwen TTS API
@@ -476,9 +476,9 @@ Special thanks to all contributors who made this release possible:
 Beta release with significant improvements to agent stability, platform onboarding, and user experience.
 
 ### New Features
-- **Feishu/Lark CLI Onboarding**: New `cc-connect feishu setup` command with QR code terminal display for quick bot configuration, supporting both new bot creation and existing bot binding
+- **Feishu/Lark CLI Onboarding**: New `agent-connect feishu setup` command with QR code terminal display for quick bot configuration, supporting both new bot creation and existing bot binding
 - **Pi Agent**: Added support for Pi coding agent with full session management and tool handling
-- **Session TUI Browser**: New `cc-connect sessions` subcommand with terminal UI for browsing session history
+- **Session TUI Browser**: New `agent-connect sessions` subcommand with terminal UI for browsing session history
 - **Multi-Workspace Mode**: Channel-based workspace resolution with auto-binding by convention and interactive init flow
 - **Design Documentation**: Added comprehensive design plans for multi-workspace and session resilience features
 - **Slack Enhancements**: Typing indicator via emoji reactions, mrkdwn formatting guidance in system prompt
@@ -569,7 +569,7 @@ Patch release with bug fixes and minor enhancements.
 
 ## v1.2.0 (2026-03-08)
 
-This is the first stable release of cc-connect 1.2.0, consolidating all beta changes and adding new features.
+This is the first stable release of agent-connect 1.2.0, consolidating all beta changes and adding new features.
 
 ### New Features (since beta.7)
 - **Official QQ Bot Platform**: Native integration with Tencent's official QQ Bot Platform via WebSocket, supporting text, image, and document messages
@@ -602,7 +602,7 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 ### New Features
 - **Multi-Bot Relay Binding**: `/bind` now supports binding multiple bots in a group chat; use `/bind <project>` to add, `/bind -<project>` to remove specific project
 - **System-level Systemd**: Daemon mode now supports system-level systemd (`/etc/systemd/system/`) when running as root, useful for servers and containers
-- **Config Example Command**: `cc-connect config-example` prints embedded config template for quick reference
+- **Config Example Command**: `agent-connect config-example` prints embedded config template for quick reference
 - **Interactive Command Buttons**: `/lang`, `/model`, `/mode` commands now show interactive button menus for easy selection
 - **Exec Commands**: Custom commands can execute shell commands directly with `exec` field in config
 - **Configurable Idle Timeout**: Agent idle timeout can be configured via `idle_timeout_mins` in config
@@ -617,7 +617,7 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 ## v1.2.0-beta.6 (2026-03-06)
 
 ### New Features
-- **Bot-to-Bot Relay**: Forward messages between different messaging platforms via CLI (`cc-connect relay`) and internal API; enables cross-platform bot communication
+- **Bot-to-Bot Relay**: Forward messages between different messaging platforms via CLI (`agent-connect relay`) and internal API; enables cross-platform bot communication
 - **Session Search**: Search sessions by name, ID prefix, or summary with `/search <keyword>` command
 - **List Pagination**: `/list` now supports pagination with `--page` and `--page-size` flags for large session counts
 - **Per-Platform Streaming Preview Control**: Configure streaming preview per platform via `streaming_preview` setting (Telegram, Discord, Feishu)
@@ -673,7 +673,7 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 
 ### New Features
 - **`/upgrade` Command**: Check for available updates (including beta) and self-update the binary in-place; queries both GitHub and Gitee releases
-- **`/restart` Command**: Restart cc-connect service from chat with post-restart success notification
+- **`/restart` Command**: Restart agent-connect service from chat with post-restart success notification
 - **`/config reload` Command**: Hot-reload configuration (display, providers, commands) without restarting
 - **`/name` Command**: Set custom display names for sessions (e.g. `/name my-feature`, `/name 3 bugfix`); names persist across restarts and show in `/list`, `/switch`, `/status`
 - **Default Quiet Mode**: Configure `quiet = true` globally or per-project in config.toml to suppress thinking/tool progress by default; users can still toggle with `/quiet`
@@ -713,12 +713,12 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 - **`/config` Command**: View and modify runtime configuration (e.g. `thinking_max_len`, `tool_max_len`) from chat, with persistent save to `config.toml`
 - **`/doctor` Command**: Run system diagnostics covering agent authentication, platform connectivity, system resources, dependencies, and network latency; fully i18n-supported
 - **Discord Slash Commands**: Register native Discord Application Commands so typing `/` shows an autocomplete menu; supports per-guild instant registration via `guild_id` config
-- **Daemon Mode**: Run cc-connect as a background service (`cc-connect daemon install/start/stop/status/logs`); supports systemd (Linux) and launchd (macOS)
+- **Daemon Mode**: Run agent-connect as a background service (`agent-connect daemon install/start/stop/status/logs`); supports systemd (Linux) and launchd (macOS)
 - **Qoder CLI Agent**: Full support for the Qoder coding agent with streaming JSON, mode switching, and model selection
 - **Telegram Proxy**: Support HTTP/SOCKS5 proxy for Telegram bot API connections
 - **WeChat Work Proxy Auth**: Add `proxy_username` / `proxy_password` for authenticated forward proxies
 - **i18n Expansion**: Add Traditional Chinese (zh-TW), Japanese (ja), and Spanish (es) language support
-- **`--stdin` Support**: Read prompt from stdin for CLI usage (`echo "hello" | cc-connect send --stdin`)
+- **`--stdin` Support**: Read prompt from stdin for CLI usage (`echo "hello" | agent-connect send --stdin`)
 
 ### Improvements
 - **Slow Operation Monitoring**: Warn-level logs for slow platform send (>2s), agent start (>5s), agent close (>3s), agent send (>2s), and agent first event (>15s); turn completion logs now include `turn_duration`
@@ -758,10 +758,10 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 
 ### New Features
 - **QQ Platform** (Beta): Support QQ messaging via OneBot v11 / NapCat WebSocket
-- **Cron Scheduling**: Schedule recurring tasks via `/cron` command or CLI (`cc-connect cron add`), with JSON persistence and agent-aware session injection
+- **Cron Scheduling**: Schedule recurring tasks via `/cron` command or CLI (`agent-connect cron add`), with JSON persistence and agent-aware session injection
 - **Feishu Emoji Reaction**: Auto-add emoji reaction (default: "OnIt") on incoming messages to confirm receipt; configurable via `reaction_emoji`
 - **Display Truncation Config**: New `[display]` config section to control thinking/tool message truncation (`thinking_max_len`, `tool_max_len`); set to 0 to disable truncation
-- **`/version` Command**: Check current cc-connect version from within chat
+- **`/version` Command**: Check current agent-connect version from within chat
 
 ### Bug Fixes
 - **Windows `/list` fix**: Claude Code sessions now discoverable on Windows despite drive letter colon in project key paths
@@ -788,13 +788,13 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 ### New Features
 - **Voice Messages (STT)**: Transcribe voice messages to text via OpenAI Whisper, Groq Whisper, or SiliconFlow SenseVoice; requires `ffmpeg`
 - **Image Support**: Handle image messages across platforms with multimodal content forwarding to agents
-- **CLI Send**: `cc-connect send` command and internal Unix socket API for programmatic message sending
+- **CLI Send**: `agent-connect send` command and internal Unix socket API for programmatic message sending
 - **Message Dedup**: Prevent duplicate processing of WeChat Work messages
 
 ## v1.1.0-beta.2 (2026-03-01)
 
 ### New Features
-- **Provider Management**: `/provider` command for runtime API provider switching; CLI `cc-connect provider add/list`
+- **Provider Management**: `/provider` command for runtime API provider switching; CLI `agent-connect provider add/list`
 - **Configurable Data Dir**: Session data stored in `~/.cc-connect/` by default (configurable via `data_dir`)
 - **Markdown Stripping**: Plain text fallback for platforms that don't support markdown (e.g. WeChat)
 
@@ -802,7 +802,7 @@ This is the first stable release of cc-connect 1.2.0, consolidating all beta cha
 
 ### New Features
 - **Codex Agent**: OpenAI Codex CLI integration
-- **Self-Update**: `cc-connect update` and `cc-connect check-update` commands
+- **Self-Update**: `agent-connect update` and `agent-connect check-update` commands
 - **I18n**: Auto-detect language, `/lang` command to switch between English and Chinese
 - **Session Persistence**: Sessions saved to disk as JSON, restored on restart
 

@@ -31,7 +31,7 @@ const (
 	// pollTimeout, otherwise transient MAX backend lag pushes header arrival
 	// past the deadline and the client cancels the long-poll, triggering a
 	// retry storm.
-	httpTimeout = 90 * time.Second
+	httpTimeout             = 90 * time.Second
 	initialReconnectBackoff = time.Second
 	maxReconnectBackoff     = 30 * time.Second
 	stableConnectionWindow  = 10 * time.Second
@@ -97,7 +97,7 @@ type Platform struct {
 //	                                               # X-Max-Bot-Api-Secret header
 //	                                               # of every webhook POST (?s= also
 //	                                               # accepted for manual testing)
-//	webhook_resubscribe_interval = "5m"            # optional, default 5m; cc-connect
+//	webhook_resubscribe_interval = "5m"            # optional, default 5m; agent-connect
 //	                                               # periodically re-POSTs the
 //	                                               # subscription because MAX has been
 //	                                               # observed to silently drop it
@@ -1526,13 +1526,13 @@ func splitMessage(text string, maxLen int) []string {
 
 // Compile-time interface compliance assertions.
 var (
-	_ core.Platform                    = (*Platform)(nil)
-	_ core.ImageSender                 = (*Platform)(nil)
-	_ core.FileSender                  = (*Platform)(nil)
-	_ core.AudioSender                 = (*Platform)(nil)
-	_ core.InlineButtonSender          = (*Platform)(nil)
-	_ core.MessageUpdater              = (*Platform)(nil)
-	_ core.TypingIndicator             = (*Platform)(nil)
+	_ core.Platform                      = (*Platform)(nil)
+	_ core.ImageSender                   = (*Platform)(nil)
+	_ core.FileSender                    = (*Platform)(nil)
+	_ core.AudioSender                   = (*Platform)(nil)
+	_ core.InlineButtonSender            = (*Platform)(nil)
+	_ core.MessageUpdater                = (*Platform)(nil)
+	_ core.TypingIndicator               = (*Platform)(nil)
 	_ core.FormattingInstructionProvider = (*Platform)(nil)
-	_ core.ReplyContextReconstructor   = (*Platform)(nil)
+	_ core.ReplyContextReconstructor     = (*Platform)(nil)
 )

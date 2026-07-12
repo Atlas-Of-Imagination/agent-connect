@@ -1,4 +1,4 @@
-﻿package reasonix
+package reasonix
 
 import (
 	"context"

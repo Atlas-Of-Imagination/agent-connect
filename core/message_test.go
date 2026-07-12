@@ -113,7 +113,7 @@ func TestSaveFilesToDisk_RejectsPathTraversal(t *testing.T) {
 // not match where the file actually landed once the agent process started
 // from a different cwd. The fix absolutizes workDir before joining, so the
 // returned paths are usable from anywhere — including the spawned agent
-// process whose cwd may differ from cc-connect's.
+// process whose cwd may differ from agent-connect's.
 func TestSaveFilesToDisk_RelativeWorkDirReturnsAbsolutePaths(t *testing.T) {
 	// Build a real directory under t.TempDir() and feed a relative path
 	// to SaveFilesToDisk. The returned paths must be absolute regardless
@@ -150,7 +150,7 @@ func TestSaveFilesToDisk_RelativeWorkDirReturnsAbsolutePaths(t *testing.T) {
 
 // TestSaveFilesToDisk_AbsoluteWorkDirReturnsAbsolutePaths confirms the
 // common case (deploys with an absolute workDir) keeps working — no
-// regression for users who already configured cc-connect with absolute
+// regression for users who already configured agent-connect with absolute
 // paths. The returned path is the abs version of the input joined with
 // the standard attachments directory.
 func TestSaveFilesToDisk_AbsoluteWorkDirReturnsAbsolutePaths(t *testing.T) {
@@ -223,7 +223,7 @@ func TestAppendFileRefs_AbsolutizesRelativePaths(t *testing.T) {
 	// and verify each one is an absolute path. This is the load-bearing check:
 	// the prompt handed to the agent must always point at real on-disk
 	// locations, never bare relative paths that only resolve from the
-	// cc-connect process's cwd.
+	// agent-connect process's cwd.
 	listStart := strings.Index(got, "please read them: ")
 	if listStart < 0 {
 		t.Fatalf("AppendFileRefs output missing the file-ref list marker: %q", got)

@@ -243,7 +243,7 @@ func TestReadSettingsModels(t *testing.T) {
 			"provider-a/family-a/model-beta",
 			"provider-b/family-b/model-gamma",
 		},
-		"defaultModel":  "family-a/model-beta",
+		"defaultModel":    "family-a/model-beta",
 		"defaultProvider": "provider-a",
 	}
 	data, _ := json.Marshal(settings)
@@ -822,7 +822,7 @@ func TestHandleEvent_UnhandledType(t *testing.T) {
 //
 // Prior to the fix, ctx.compact() was fire-and-forget: pi emits
 // compaction_start/compaction_end events on stdout but never sends agent_end.
-// Without an explicit handler, cc-connect's processInteractiveEvents hangs
+// Without an explicit handler, agent-connect's processInteractiveEvents hangs
 // forever waiting for a turn-end signal that never arrives. The fix in
 // handleEvent adds a compaction_end case that synthesizes EventResult so
 // the engine can finalize the turn. On errors it also surfaces an
@@ -1371,17 +1371,17 @@ func newFakeRPCSession(t *testing.T, sessionID, cmd, workDir string) *piSession 
 	}
 
 	s := &piSession{
-		cmd:       rpcCmd[0],
-		workDir:   workDir,
-		events:    make(chan core.Event, 64),
-		extraEnv:  nil,
-		modelsCW:  nil,
-		rpcReady:  make(chan struct{}),
-		rpc:       true,
+		cmd:           rpcCmd[0],
+		workDir:       workDir,
+		events:        make(chan core.Event, 64),
+		extraEnv:      nil,
+		modelsCW:      nil,
+		rpcReady:      make(chan struct{}),
+		rpc:           true,
 		extPending:    make(map[string]string),
 		extPendingRev: make(map[string]string),
 		extMethod:     make(map[string]string),
-		attachDir: filepath.Join(workDir, ".cc-connect", "attachments", "pi-"+sessionID),
+		attachDir:     filepath.Join(workDir, ".cc-connect", "attachments", "pi-"+sessionID),
 	}
 	s.alive.Store(true)
 	s.ctx, s.cancel = context.WithCancel(context.Background())
@@ -1447,7 +1447,7 @@ while IFS= read -r line; do
     case "$line" in
         *get_state*)
             cat <<EOF
-{"id":"cc-connect-state-probe","type":"response","command":"get_state","success":true,"data":{"sessionId":"%s","sessionFile":"/tmp/fake.jsonl"}}
+{"id":"agent-connect-state-probe","type":"response","command":"get_state","success":true,"data":{"sessionId":"%s","sessionFile":"/tmp/fake.jsonl"}}
 EOF
             ;;
     esac
@@ -1490,7 +1490,7 @@ echo '{"type":"extension_ui_request","id":"ext-init","method":"setStatus","statu
 while IFS= read -r line; do
     case "$line" in
         *get_state*)
-            echo '{"id":"cc-connect-state-probe","type":"response","command":"get_state","success":false,"error":"session not available"}'
+            echo '{"id":"agent-connect-state-probe","type":"response","command":"get_state","success":false,"error":"session not available"}'
             ;;
     esac
 done
@@ -1672,7 +1672,7 @@ func TestForwardSelect_EmptyTitleUsesDefault(t *testing.T) {
 // TestForwardSelect_ObjectOptionsExtractsLabelAndDescription verifies that
 // extension_select options sent as objects (with both label and description)
 // are forwarded to the engine as UserQuestionOption{Label, Description},
-// not silently dropped. Regression guard for the bug where the cc-connect
+// not silently dropped. Regression guard for the bug where the agent-connect
 // TUI showed option descriptions but the Feishu card rendered label-only
 // because forwardSelect only handled string-form options.
 func TestForwardSelect_ObjectOptionsExtractsLabelAndDescription(t *testing.T) {
@@ -1938,7 +1938,7 @@ func TestPiSession_ReadLoopWithEcho(t *testing.T) {
 	// Create a process that emits Pi RPC JSONL: session, text delta, agent_end.
 	sessionJSON, _ := json.Marshal(map[string]any{"type": "session", "id": "echo-sess"})
 	textJSON, _ := json.Marshal(map[string]any{
-		"type": "message_update",
+		"type":                  "message_update",
 		"assistantMessageEvent": map[string]any{"type": "text_delta", "delta": "hi"},
 	})
 	agentEndJSON, _ := json.Marshal(map[string]any{"type": "agent_end"})
@@ -1950,11 +1950,11 @@ func TestPiSession_ReadLoopWithEcho(t *testing.T) {
 	defer cancel()
 
 	s := &piSession{
-		cmd:       "echo",
-		workDir:   t.TempDir(),
-		rpc:       true,
-		events:    make(chan core.Event, 64),
-		rpcReady:  make(chan struct{}),
+		cmd:           "echo",
+		workDir:       t.TempDir(),
+		rpc:           true,
+		events:        make(chan core.Event, 64),
+		rpcReady:      make(chan struct{}),
 		extPending:    make(map[string]string),
 		extPendingRev: make(map[string]string),
 		extMethod:     make(map[string]string),

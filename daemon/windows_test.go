@@ -20,9 +20,9 @@ func TestStrictPowerShellStopsOnCmdletErrors(t *testing.T) {
 
 func TestBuildWindowsTaskScript(t *testing.T) {
 	cfg := Config{
-		BinaryPath: `C:\Program Files\cc-connect\cc-connect.exe`,
+		BinaryPath: `C:\Program Files\agent-connect\agent-connect.exe`,
 		WorkDir:    `C:\Users\me\.cc-connect`,
-		LogFile:    `C:\Users\me\.cc-connect\logs\cc-connect.log`,
+		LogFile:    `C:\Users\me\.cc-connect\logs\agent-connect.log`,
 		LogMaxSize: 10 * 1024 * 1024,
 		EnvPATH:    `C:\Program Files\nodejs;C:\Users\me\AppData\Local\Programs`,
 		EnvExtra: map[string]string{
@@ -33,14 +33,14 @@ func TestBuildWindowsTaskScript(t *testing.T) {
 
 	script := buildWindowsTaskScript(cfg)
 	for _, want := range []string{
-		`$env:CC_LOG_FILE = 'C:\Users\me\.cc-connect\logs\cc-connect.log'`,
+		`$env:CC_LOG_FILE = 'C:\Users\me\.cc-connect\logs\agent-connect.log'`,
 		`$env:CC_LOG_MAX_SIZE = '10485760'`,
 		`$env:PATH = 'C:\Program Files\nodejs;C:\Users\me\AppData\Local\Programs'`,
 		`$env:HTTPS_PROXY = 'http://127.0.0.1:7890'`,
 		`$env:http_proxy = 'http://127.0.0.1:7890'`,
 		`Set-Location -LiteralPath 'C:\Users\me\.cc-connect'`,
 		`while ($true) {`,
-		`& 'C:\Program Files\cc-connect\cc-connect.exe'`,
+		`& 'C:\Program Files\agent-connect\agent-connect.exe'`,
 		`if ($exitCode -eq 0) { exit 0 }`,
 		`Start-Sleep -Seconds 10`,
 	} {
@@ -51,14 +51,14 @@ func TestBuildWindowsTaskScript(t *testing.T) {
 }
 
 func TestWindowsTaskActionRunsHidden(t *testing.T) {
-	got := windowsTaskAction(`C:\Users\me\.cc-connect\cc-connect-daemon.ps1`)
+	got := windowsTaskAction(`C:\Users\me\.cc-connect\agent-connect-daemon.ps1`)
 	for _, want := range []string{
 		`powershell.exe`,
 		`-WindowStyle Hidden`,
 		`-NoProfile`,
 		`-NonInteractive`,
 		`-ExecutionPolicy Bypass`,
-		`-File "C:\Users\me\.cc-connect\cc-connect-daemon.ps1"`,
+		`-File "C:\Users\me\.cc-connect\agent-connect-daemon.ps1"`,
 	} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("windowsTaskAction() missing %q: %q", want, got)
@@ -76,7 +76,7 @@ func TestWindowsTaskCreateUsesLimitedInteractivePrincipal(t *testing.T) {
 		return "", nil
 	}
 
-	if err := createWindowsTask(`C:\Users\me\.cc-connect\cc-connect-daemon.ps1`); err != nil {
+	if err := createWindowsTask(`C:\Users\me\.cc-connect\agent-connect-daemon.ps1`); err != nil {
 		t.Fatalf("createWindowsTask() error = %v", err)
 	}
 	for _, want := range []string{
@@ -85,7 +85,7 @@ func TestWindowsTaskCreateUsesLimitedInteractivePrincipal(t *testing.T) {
 		`-LogonType Interactive`,
 		`-RunLevel Limited`,
 		`-WindowStyle Hidden`,
-		`C:\Users\me\.cc-connect\cc-connect-daemon.ps1`,
+		`C:\Users\me\.cc-connect\agent-connect-daemon.ps1`,
 	} {
 		if !strings.Contains(script, want) {
 			t.Fatalf("create script missing %q:\n%s", want, script)
@@ -103,11 +103,11 @@ func TestWindowsTaskMatchesActionRequiresExactAction(t *testing.T) {
 		return "true", nil
 	}
 
-	if !windowsTaskMatchesAction(`C:\Users\me\.cc-connect\cc-connect-daemon.ps1`) {
+	if !windowsTaskMatchesAction(`C:\Users\me\.cc-connect\agent-connect-daemon.ps1`) {
 		t.Fatal("windowsTaskMatchesAction() = false, want true")
 	}
 	for _, want := range []string{
-		`$expectedArgs = '-WindowStyle Hidden -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Users\me\.cc-connect\cc-connect-daemon.ps1"'`,
+		`$expectedArgs = '-WindowStyle Hidden -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "C:\Users\me\.cc-connect\agent-connect-daemon.ps1"'`,
 		`$action.Execute -ieq 'powershell.exe'`,
 		`$action.Arguments -eq $expectedArgs`,
 	} {
@@ -152,7 +152,7 @@ func TestBuildWindowsTaskScript_DropsEmptyValue(t *testing.T) {
 
 // TestSchtasksInstall_TightensExistingScriptFrom0644 covers the upgrade
 // path: os.WriteFile would truncate-in-place and keep the old POSIX
-// mode of a script left by an earlier cc-connect version. While
+// mode of a script left by an earlier agent-connect version. While
 // Windows real access is governed by ACLs, the POSIX bits are still
 // expected to reflect intent.
 func TestSchtasksInstall_TightensExistingScriptFrom0644(t *testing.T) {

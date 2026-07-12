@@ -129,7 +129,7 @@ type Config struct {
 	// available. Example: "source ~/.zshrc"
 	ShellProfile string `toml:"shell_profile,omitempty"`
 	// MaxAttachmentSizeMB is the per-file size limit, in MiB, for attachments
-	// sent through `cc-connect send --file/--image/--audio/--video` and the
+	// sent through `agent-connect send --file/--image/--audio/--video` and the
 	// /send API. 0 (the default) means use core.DefaultMaxAttachmentSize
 	// (50 MiB). Raise it to send larger files; the request body limit on the
 	// API side scales with this value to account for base64 expansion.
@@ -320,7 +320,7 @@ type TTSConfig struct {
 }
 
 // TTSAgentConfig overrides global [tts] synthesis parameters for one project.
-// Keys are project names, which map naturally to cc-connect's agent workspaces
+// Keys are project names, which map naturally to agent-connect's agent workspaces
 // (for example assistant, reviewer).
 type TTSAgentConfig struct {
 	Provider     string  `toml:"provider,omitempty"`
@@ -482,7 +482,7 @@ type ProjectConfig struct {
 	Platforms                    []PlatformConfig   `toml:"platforms"`
 	Heartbeat                    HeartbeatConfig    `toml:"heartbeat"`
 	AutoCompress                 AutoCompressConfig `toml:"auto_compress"`
-	// ResetOnIdleMins automatically rotates to a new cc-connect session after
+	// ResetOnIdleMins automatically rotates to a new agent-connect session after
 	// the current session has been inactive for the specified number of minutes.
 	// 0 or nil disables the behavior.
 	ResetOnIdleMins *int `toml:"reset_on_idle_mins,omitempty"`
@@ -492,7 +492,7 @@ type ProjectConfig struct {
 	// RunAsUser, when set, causes the agent command for this project to be
 	// spawned under a different Unix user via `sudo -n -iu <user> --`. This
 	// provides OS-level file-system isolation from the supervisor user who
-	// runs cc-connect itself. Requires passwordless sudo to the target user
+	// runs agent-connect itself. Requires passwordless sudo to the target user
 	// and is POSIX-only. See docs/usage.md "Running agents as a different
 	// Unix user" for setup and migration.
 	RunAsUser string `toml:"run_as_user,omitempty"`
@@ -545,7 +545,7 @@ type ProjectConfig struct {
 	Observe    *ObserveConfig  `toml:"observe,omitempty"`
 	References ReferenceConfig `toml:"references,omitempty"`
 	// FilterExternalSessions: when true, /list only shows sessions created by
-	// cc-connect, hiding sessions created by direct CLI usage in the same work_dir.
+	// agent-connect, hiding sessions created by direct CLI usage in the same work_dir.
 	// Default is false (show all sessions).
 	FilterExternalSessions *bool `toml:"filter_external_sessions,omitempty"`
 	// Shell overrides the global shell for this project. See Config.Shell.
@@ -644,7 +644,7 @@ func load(path string) (*Config, error) {
 
 // LoadPermissive loads the config file and performs all validation except the
 // "at least one platform per project" check. Use this for commands (like
-// `cc-connect web`) that should work even before platforms are configured.
+// `agent-connect web`) that should work even before platforms are configured.
 func LoadPermissive(path string) (*Config, error) {
 	cfg, err := load(path)
 	if err != nil {
@@ -989,11 +989,40 @@ func EffectiveCardMode(cfg *Config, proj *ProjectConfig) string {
 			return m
 		}
 	}
+	if ProjectHasFeishuLikePlatform(proj) {
+		return "rich"
+	}
 	return "legacy"
 }
 
+// ProjectHasFeishuLikePlatform reports whether a project uses the Feishu/Lark
+// adapter. These platforms have a first-class card UX and reliable user IDs, so
+// a few interaction defaults are intentionally more chat-native for them.
+func ProjectHasFeishuLikePlatform(proj *ProjectConfig) bool {
+	if proj == nil {
+		return false
+	}
+	for _, p := range proj.Platforms {
+		switch strings.ToLower(strings.TrimSpace(p.Type)) {
+		case "feishu", "lark":
+			return true
+		}
+	}
+	return false
+}
+
+// EffectiveInjectSender resolves whether messages sent to the agent should be
+// prefixed with sender metadata. Feishu/Lark group chats benefit from this by
+// default because multiple people may @ the same bot in a shared session.
+func EffectiveInjectSender(proj *ProjectConfig) bool {
+	if proj != nil && proj.InjectSender != nil {
+		return *proj.InjectSender
+	}
+	return ProjectHasFeishuLikePlatform(proj)
+}
+
 // validatePermissive is like validate but skips the "at least one platform"
-// requirement so that commands like `cc-connect web` can operate on agent-only
+// requirement so that commands like `agent-connect web` can operate on agent-only
 // configs before platforms have been set up.
 func (c *Config) validatePermissive() error {
 	return c.validateInternal(true)

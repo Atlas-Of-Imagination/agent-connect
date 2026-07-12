@@ -563,6 +563,55 @@ func TestValidateProjectDisplayConfig(t *testing.T) {
 	}
 }
 
+func TestEffectiveCardMode_DefaultsRichForFeishuLikePlatform(t *testing.T) {
+	proj := ProjectConfig{
+		Platforms: []PlatformConfig{{Type: "feishu"}},
+	}
+	if got := EffectiveCardMode(&Config{}, &proj); got != "rich" {
+		t.Fatalf("EffectiveCardMode() = %q, want rich", got)
+	}
+}
+
+func TestEffectiveCardMode_ExplicitLegacyOverridesFeishuDefault(t *testing.T) {
+	legacy := "legacy"
+	proj := ProjectConfig{
+		Display:   &DisplayConfig{CardMode: &legacy},
+		Platforms: []PlatformConfig{{Type: "feishu"}},
+	}
+	if got := EffectiveCardMode(&Config{}, &proj); got != "legacy" {
+		t.Fatalf("EffectiveCardMode() = %q, want legacy", got)
+	}
+}
+
+func TestEffectiveCardMode_DefaultsLegacyForNonFeishuPlatform(t *testing.T) {
+	proj := ProjectConfig{
+		Platforms: []PlatformConfig{{Type: "telegram"}},
+	}
+	if got := EffectiveCardMode(&Config{}, &proj); got != "legacy" {
+		t.Fatalf("EffectiveCardMode() = %q, want legacy", got)
+	}
+}
+
+func TestEffectiveInjectSender_DefaultsTrueForFeishuLikePlatform(t *testing.T) {
+	proj := ProjectConfig{
+		Platforms: []PlatformConfig{{Type: "lark"}},
+	}
+	if !EffectiveInjectSender(&proj) {
+		t.Fatal("EffectiveInjectSender() = false, want true")
+	}
+}
+
+func TestEffectiveInjectSender_ExplicitFalseOverridesFeishuDefault(t *testing.T) {
+	fal := false
+	proj := ProjectConfig{
+		InjectSender: &fal,
+		Platforms:    []PlatformConfig{{Type: "feishu"}},
+	}
+	if EffectiveInjectSender(&proj) {
+		t.Fatal("EffectiveInjectSender() = true, want false")
+	}
+}
+
 func TestLoad_DefaultsDataDir(t *testing.T) {
 	dir := t.TempDir()
 	t.Setenv("HOME", dir)

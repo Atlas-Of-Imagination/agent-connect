@@ -327,7 +327,7 @@ func newPlatform(name, domain string, opts map[string]any) (core.Platform, error
 
 	// Parse mention_map for outbound bot-to-bot @ resolution.
 	// Maps agent-friendly names (e.g. "Collector-B") to Feishu open_ids,
-	// so that when an agent writes @Collector-B in its reply, cc-connect
+	// so that when an agent writes @Collector-B in its reply, agent-connect
 	// converts it to a native Feishu <at> tag that triggers a notification.
 	var mentionMap map[string]string
 	if mentionMapRaw, ok := opts["mention_map"]; ok {
@@ -341,7 +341,7 @@ func newPlatform(name, domain string, opts map[string]any) (core.Platform, error
 		}
 	}
 
-	progressStyle := "legacy"
+	progressStyle := "card"
 	if v, ok := opts["progress_style"].(string); ok {
 		switch strings.ToLower(strings.TrimSpace(v)) {
 		case "", "legacy":
@@ -1180,7 +1180,7 @@ func (p *Platform) flushImageBatchByRef(sessionKey string, ref *imageBatchEntry)
 
 // flushImageBatches synchronously dispatches any pending image batches.
 // Intended to be called from Stop() so buffered images aren't lost when
-// cc-connect shuts down.
+// agent-connect shuts down.
 func (p *Platform) flushImageBatches() {
 	p.imageBatchMu.Lock()
 	pending := p.imageBatch
@@ -4844,14 +4844,14 @@ func (p *Platform) extractPostParts(messageID string, post *postLang) ([]string,
 }
 
 // onBotMenu handles bot custom menu click events. When a menu item's
-// event_key starts with "/", it is dispatched as a slash command.
-// This allows users to configure menu items in the Feishu developer
-// console with event_key set to commands like "/help", "/status", etc.
+// event_key targets a known dashboard/help entry, it opens a card panel in the
+// user's bot chat. Other event keys are dispatched as slash commands so
+// existing Feishu console menu configurations such as "/status" keep working.
 func (p *Platform) onBotMenu(event *larkapplication.P2BotMenuV6) error {
 	if event == nil || event.Event == nil || event.Event.EventKey == nil {
 		return nil
 	}
-	eventKey := *event.Event.EventKey
+	eventKey := strings.TrimSpace(*event.Event.EventKey)
 
 	userID := ""
 	if event.Event.Operator != nil && event.Event.Operator.OperatorId != nil && event.Event.Operator.OperatorId.OpenId != nil {
@@ -4873,23 +4873,81 @@ func (p *Platform) onBotMenu(event *larkapplication.P2BotMenuV6) error {
 
 	slog.Info(p.tag()+": bot menu clicked", "event_key", eventKey, "user", userID)
 
+	sessionKey := p.platformName + ":" + userID + ":" + userID
+	rctx := replyContext{chatID: userID, sessionKey: sessionKey}
+	if p.sendBotMenuCard(context.Background(), rctx, eventKey) {
+		return nil
+	}
+
 	content := eventKey
 	if !strings.HasPrefix(content, "/") {
 		content = "/" + content
 	}
 
 	userName := p.resolveUserName(userID)
-	sessionKey := p.platformName + ":" + userID + ":" + userID
+	h := p.getHandler()
+	if h == nil {
+		slog.Warn(p.tag()+": bot menu ignored because handler is not initialized", "event_key", eventKey, "user", userID)
+		return nil
+	}
 
-	p.getHandler()(p.dispatchPlatform(), &core.Message{
+	h(p.dispatchPlatform(), &core.Message{
 		SessionKey: sessionKey,
 		Platform:   p.platformName,
 		Content:    content,
 		UserID:     userID,
 		UserName:   userName,
-		ReplyCtx:   replyContext{chatID: userID, sessionKey: sessionKey},
+		ReplyCtx:   rctx,
 	})
 	return nil
+}
+
+func (p *Platform) sendBotMenuCard(ctx context.Context, rctx replyContext, eventKey string) bool {
+	action, ok := botMenuCardAction(eventKey)
+	if !ok || p.cardNavHandler == nil {
+		return false
+	}
+	sender, ok := p.self.(core.CardSender)
+	if !ok {
+		return false
+	}
+	card := p.cardNavHandler(action, rctx.sessionKey)
+	if card == nil {
+		return false
+	}
+	if err := sender.SendCard(ctx, rctx, card); err != nil {
+		slog.Warn(p.tag()+": send bot menu card failed, falling back to command",
+			"event_key", eventKey, "action", action, "error", err)
+		return false
+	}
+	return true
+}
+
+func botMenuCardAction(eventKey string) (string, bool) {
+	key := strings.ToLower(strings.TrimSpace(eventKey))
+	key = strings.TrimPrefix(key, "/")
+	switch key {
+	case "", "help", "home", "menu", "panel", "dashboard", "start":
+		return "nav:/help", true
+	case "sessions", "session", "list":
+		return "nav:/list", true
+	case "status":
+		return "nav:/status", true
+	case "mode":
+		return "nav:/mode", true
+	case "provider":
+		return "nav:/provider", true
+	case "cron":
+		return "nav:/cron", true
+	case "timer":
+		return "nav:/timer", true
+	case "commands", "command":
+		return "nav:/commands", true
+	case "doctor":
+		return "nav:/doctor", true
+	default:
+		return "", false
+	}
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5279,8 +5337,8 @@ func classifyCommandToolDetail(detail string) (title, icon string, ok bool) {
 	if strings.HasPrefix(command, "gh ") || command == "gh" {
 		return "GitHub", "cloud_outlined", true
 	}
-	if strings.HasPrefix(command, "cc-connect ") || command == "cc-connect" {
-		return "cc-connect", "robot_outlined", true
+	if strings.HasPrefix(command, "agent-connect ") || command == "agent-connect" {
+		return "agent-connect", "robot_outlined", true
 	}
 	if commandHasAnyPrefix(command, "go test", "npm test", "npm run test", "pnpm test", "yarn test", "pytest", "cargo test", "swift test", "xcodebuild test") {
 		return "Run tests", "list-check_outlined", true
@@ -5769,7 +5827,7 @@ func fetchRichCardRemoteImage(ctx context.Context, rawURL string) ([]byte, strin
 	if err != nil {
 		return nil, "", err
 	}
-	req.Header.Set("User-Agent", "cc-connect-feishu-rich-card-image-resolver/1.0")
+	req.Header.Set("User-Agent", "agent-connect-feishu-rich-card-image-resolver/1.0")
 
 	resp, err := client.Do(req)
 	if err != nil {

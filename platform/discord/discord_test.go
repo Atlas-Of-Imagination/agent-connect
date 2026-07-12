@@ -1594,7 +1594,7 @@ func TestDispatchMessage_SetsChannelKeyForThreadIsolation(t *testing.T) {
 // core.AsyncRecoverablePlatform so engine.Start treats a transient gateway
 // error as "still pending" rather than "permanently failed". Before this
 // change a single EOF on first connect (release-gate 2026-06-14) put the
-// platform offline until cc-connect was manually restarted.
+// platform offline until agent-connect was manually restarted.
 func TestPlatformImplementsAsyncRecoverable(t *testing.T) {
 	pAny, err := New(map[string]any{
 		"token":          "discord-token",
@@ -1696,4 +1696,3 @@ func basePlatformFor(t *testing.T, pAny core.Platform) *Platform {
 		return nil
 	}
 }
-

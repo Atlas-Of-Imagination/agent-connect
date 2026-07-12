@@ -1,6 +1,6 @@
 //go:build performance
 
-// Package performance contains benchmark tests for cc-connect.
+// Package performance contains benchmark tests for agent-connect.
 // These tests measure latency, throughput, and resource usage.
 //
 // Run with: go test -bench=. -benchmem -tags=performance ./tests/performance/...

@@ -190,7 +190,7 @@ func TestBuildExecArgs_ModeMapping(t *testing.T) {
 //
 //	error: unexpected argument '--sandbox' found
 //
-// silently destroying the user's session on cc-connect restart / idle reset.
+// silently destroying the user's session on agent-connect restart / idle reset.
 func TestBuildExecArgs_ResumeUsesSandboxModeConfigOverride(t *testing.T) {
 	tests := []struct {
 		mode            string

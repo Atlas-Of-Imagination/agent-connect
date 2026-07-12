@@ -1,22 +1,22 @@
 <p align="center">
-  <img src="./docs/images/banner.svg" alt="CC-Connect Banner" width="800"/>
+  <img src="./docs/images/banner.svg" alt="Agent-Connect Banner" width="800"/>
 </p>
 
 <p align="center">
-  <a href="https://github.com/chenhg5/cc-connect/actions/workflows/ci.yml">
-    <img src="https://github.com/chenhg5/cc-connect/actions/workflows/ci.yml/badge.svg" alt="CI Status"/>
+  <a href="https://github.com/chenhg5/agent-connect/actions/workflows/ci.yml">
+    <img src="https://github.com/chenhg5/agent-connect/actions/workflows/ci.yml/badge.svg" alt="CI Status"/>
   </a>
-  <a href="https://github.com/chenhg5/cc-connect/releases">
-    <img src="https://img.shields.io/github/v/release/chenhg5/cc-connect?include_prereleases" alt="Release"/>
+  <a href="https://github.com/chenhg5/agent-connect/releases">
+    <img src="https://img.shields.io/github/v/release/chenhg5/agent-connect?include_prereleases" alt="Release"/>
   </a>
-  <a href="https://www.npmjs.com/package/cc-connect">
-    <img src="https://img.shields.io/npm/dm/cc-connect?logo=npm" alt="npm downloads"/>
+  <a href="https://www.npmjs.com/package/agent-connect">
+    <img src="https://img.shields.io/npm/dm/agent-connect?logo=npm" alt="npm downloads"/>
   </a>
-  <a href="https://github.com/chenhg5/cc-connect/blob/main/LICENSE">
+  <a href="https://github.com/chenhg5/agent-connect/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"/>
   </a>
-  <a href="https://goreportcard.com/report/github.com/chenhg5/cc-connect">
-    <img src="https://goreportcard.com/badge/github.com/chenhg5/cc-connect" alt="Go Report Card"/>
+  <a href="https://goreportcard.com/report/github.com/chenhg5/agent-connect">
+    <img src="https://goreportcard.com/badge/github.com/chenhg5/agent-connect" alt="Go Report Card"/>
   </a>
 </p>
 
@@ -35,7 +35,7 @@
 
 <p align="center">
   <a href="https://trendshift.io/repositories/23266" target="_blank">
-    <img src="https://trendshift.io/api/badge/repositories/23266" alt="chenhg5/cc-connect | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/>
+    <img src="https://trendshift.io/api/badge/repositories/23266" alt="chenhg5/agent-connect | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/>
   </a>
 </p>
 
@@ -51,7 +51,7 @@
 
 MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context window powered by MiniMax Sparse Attention and natively multimodal capabilities from step zero. It leads across SWE-Bench Pro (59.0), Terminal Bench 2.1 (66.0), VIBE V2 (60.1), SVG-Bench (63.7), KernelBench Hard (28.8), BrowseComp (83.5), GDPval rubrics (74.7), Banker ToolBench (76.1), MCP Atlas (74.2), and OSWorld-verified (70.0). Build, learn, and ship with the MiniMax Token Plan.
 
-[Click here](https://platform.minimax.io/subscribe/token-plan?code=lqYrKBvjke&source=link) to get an exclusive 12% off the MiniMax Token Plan + voucher for cc-connect users!
+[Click here](https://platform.minimax.io/subscribe/token-plan?code=lqYrKBvjke&source=link) to get an exclusive 12% off the MiniMax Token Plan + voucher for agent-connect users!
 
 ---
 
@@ -63,17 +63,17 @@ MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context
 
 <tr>
 <td width="150"><a href="https://s.qiniu.com/aUbueu"><img src="assets/sponsors/qiniu.png" alt="七牛云 Qiniu Cloud" width="120"></a></td>
-<td>Thanks to <a href="https://s.qiniu.com/aUbueu">Qiniu Cloud AI</a> for sponsoring this project! Qiniu Cloud (HK:02567) is an enterprise-grade LLM MaaS platform offering one-stop access to 150+ leading global models with full protocol compatibility across all major providers. It covers text, image, audio, video, and file processing across all modalities, serving over 1.69 million enterprise and developer users worldwide. Exclusive offer for cc-connect users: enterprise customers get 12 million free tokens, and refer friends to earn up to billions of tokens in bonus.</td>
+<td>Thanks to <a href="https://s.qiniu.com/aUbueu">Qiniu Cloud AI</a> for sponsoring this project! Qiniu Cloud (HK:02567) is an enterprise-grade LLM MaaS platform offering one-stop access to 150+ leading global models with full protocol compatibility across all major providers. It covers text, image, audio, video, and file processing across all modalities, serving over 1.69 million enterprise and developer users worldwide. Exclusive offer for agent-connect users: enterprise customers get 12 million free tokens, and refer friends to earn up to billions of tokens in bonus.</td>
 </tr>
 
 <tr>
 <td width="150"><a href="https://api.fenno.ai/register?redirect=/purchase?tab=subscription%26group=16&aff=C7KG6WBS7CQJ"><img src="assets/sponsors/fenno.png" alt="Fenno.ai" width="120"></a></td>
-<td>Thanks to Fenno.ai for sponsoring this project! Fenno.ai is a stable, efficient API relay service currently providing Codex relay with full OpenAI and Anthropic protocol compatibility. It flexibly integrates with mainstream coding tools like Codex, Claude Code, and OpenCode, reliably supporting enterprise-level demands of hundreds of billions of tokens per day. Fenno.ai supports domestic and overseas entity-to-entity settlement and invoicing. Exclusive offer for cc-connect users: subscribe via <a href="https://api.fenno.ai/register?redirect=/purchase?tab=subscription%26group=16&aff=C7KG6WBS7CQJ">this link</a> for an unbeatable Coding Plan at ¥9.9 / $150 credit, and earn up to 20% bonus for each friend you refer.</td>
+<td>Thanks to Fenno.ai for sponsoring this project! Fenno.ai is a stable, efficient API relay service currently providing Codex relay with full OpenAI and Anthropic protocol compatibility. It flexibly integrates with mainstream coding tools like Codex, Claude Code, and OpenCode, reliably supporting enterprise-level demands of hundreds of billions of tokens per day. Fenno.ai supports domestic and overseas entity-to-entity settlement and invoicing. Exclusive offer for agent-connect users: subscribe via <a href="https://api.fenno.ai/register?redirect=/purchase?tab=subscription%26group=16&aff=C7KG6WBS7CQJ">this link</a> for an unbeatable Coding Plan at ¥9.9 / $150 credit, and earn up to 20% bonus for each friend you refer.</td>
 </tr>
 
 <tr>
 <td width="150"><a href="https://aigocode.com/invite/CYY3C85C"><img src="assets/sponsors/aigocode.png" alt="AIGoCode" width="120"></a></td>
-<td>Thanks to AIGoCode for sponsoring this project! AIGoCode is an all-in-one platform that integrates Claude Code, Codex, and the latest Gemini models, providing you with stable, efficient, and highly cost-effective AI coding services. The platform offers flexible subscription plans, zero risk of account suspension, direct access with no VPN required, and lightning-fast responses. AIGoCode has prepared a special benefit for cc-connect users: if you register via <a href="https://aigocode.com/invite/CYY3C85C">this link</a>, you'll receive an extra 10% bonus credit on your first top-up!</td>
+<td>Thanks to AIGoCode for sponsoring this project! AIGoCode is an all-in-one platform that integrates Claude Code, Codex, and the latest Gemini models, providing you with stable, efficient, and highly cost-effective AI coding services. The platform offers flexible subscription plans, zero risk of account suspension, direct access with no VPN required, and lightning-fast responses. AIGoCode has prepared a special benefit for agent-connect users: if you register via <a href="https://aigocode.com/invite/CYY3C85C">this link</a>, you'll receive an extra 10% bonus credit on your first top-up!</td>
 </tr>
 
 <tr>
@@ -99,12 +99,12 @@ MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context
 
 <tr>
 <td width="150"><a href="https://runapi.co/register?aff=4BXa"><img src="assets/sponsors/runapi.jpg" alt="RunAPI" width="120"></a></td>
-<td>Thanks to RunAPI for sponsoring this project! RunAPI is an efficient and stable API platform—an alternative to OpenRouter. A single API Key gives you access to 150+ leading models, including OpenAI, Claude, Gemini, DeepSeek, Grok, and more, at prices as low as 10% of the original (up to 90% off), with exceptional stability. It's seamlessly compatible with tools like Claude Code, OpenClaw, and others. RunAPI offers an exclusive perk for cc-connect users: register and contact an administrator to claim ¥7 in free credit.</td>
+<td>Thanks to RunAPI for sponsoring this project! RunAPI is an efficient and stable API platform—an alternative to OpenRouter. A single API Key gives you access to 150+ leading models, including OpenAI, Claude, Gemini, DeepSeek, Grok, and more, at prices as low as 10% of the original (up to 90% off), with exceptional stability. It's seamlessly compatible with tools like Claude Code, OpenClaw, and others. RunAPI offers an exclusive perk for agent-connect users: register and contact an administrator to claim ¥7 in free credit.</td>
 </tr>
 
 <tr>
 <td width="150"><a href="https://camel.kr777.top/register?aff=V2z8"><img src="assets/sponsors/camel_logo.png" alt="CaMeL" width="120"></a></td>
-<td>Thanks to CaMeL for sponsoring this project! In-depth cooperation with major research institutes and supercomputing centers, self-developed high-stability high-efficiency cache scheduling solution. Exclusive for cc-connect users: New registration authentication immediately receive $10 credit upon registration. Register via <a href="https://camel.kr777.top/register?aff=V2z8">this link</a>.</td>
+<td>Thanks to CaMeL for sponsoring this project! In-depth cooperation with major research institutes and supercomputing centers, self-developed high-stability high-efficiency cache scheduling solution. Exclusive for agent-connect users: New registration authentication immediately receive $10 credit upon registration. Register via <a href="https://camel.kr777.top/register?aff=V2z8">this link</a>.</td>
 </tr>
 
 <tr>
@@ -113,8 +113,8 @@ MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context
 </tr>
 
 <tr>
-<td width="150"><a href="https://ergouapi.com/r/gh-cc-connect"><img src="assets/sponsors/ergou.png" alt="二狗 API" width="120"></a></td>
-<td>Thanks to Ergou API (二狗 API) for sponsoring this project! Ergou API is an LLM API relay offering industry-low 0.1x-0.2x rates across the board, with 100% native endpoints for Claude, GPT, Gemini and other top-tier LLMs. Backed by premium IPLC routes plus dual residential ISP redundancy, Ergou API delivers stable, low-latency access nationwide. Developers and studios are welcome to <a href="https://ergouapi.com/r/gh-cc-connect">sign up</a>.</td>
+<td width="150"><a href="https://ergouapi.com/r/gh-agent-connect"><img src="assets/sponsors/ergou.png" alt="二狗 API" width="120"></a></td>
+<td>Thanks to Ergou API (二狗 API) for sponsoring this project! Ergou API is an LLM API relay offering industry-low 0.1x-0.2x rates across the board, with 100% native endpoints for Claude, GPT, Gemini and other top-tier LLMs. Backed by premium IPLC routes plus dual residential ISP redundancy, Ergou API delivers stable, low-latency access nationwide. Developers and studios are welcome to <a href="https://ergouapi.com/r/gh-agent-connect">sign up</a>.</td>
 </tr>
 
 <tr>
@@ -144,19 +144,19 @@ MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context
 
 
 <tr>
-<td width="150"><a href="https://passport.compshare.cn/register?referral_code=H65IOClRGu5CM7nn5ykfad&ytag=GPU_YY_YX_git_cc-connect"><img src="assets/sponsors/youyunzhisuan.png" alt="优云智算" width="120"></a></td>
-<td>Thanks to 优云智算 for sponsoring this project! 优云智算 (UCloud AI Cloud Platform) provides stable and comprehensive domestic and international model APIs with just one key. Featuring high-value Coding Plan packages (monthly or per-use), plus stable official relay for overseas models. Supports Claude Code, Codex, and API calls. Enterprise features include high concurrency, 7x24 technical support, and self-service invoicing. Register via <a href="https://passport.compshare.cn/register?referral_code=H65IOClRGu5CM7nn5ykfad&ytag=GPU_YY_YX_git_cc-connect">this link</a> to receive ¥5 free platform credit!</td>
+<td width="150"><a href="https://passport.compshare.cn/register?referral_code=H65IOClRGu5CM7nn5ykfad&ytag=GPU_YY_YX_git_agent-connect"><img src="assets/sponsors/youyunzhisuan.png" alt="优云智算" width="120"></a></td>
+<td>Thanks to 优云智算 for sponsoring this project! 优云智算 (UCloud AI Cloud Platform) provides stable and comprehensive domestic and international model APIs with just one key. Featuring high-value Coding Plan packages (monthly or per-use), plus stable official relay for overseas models. Supports Claude Code, Codex, and API calls. Enterprise features include high concurrency, 7x24 technical support, and self-service invoicing. Register via <a href="https://passport.compshare.cn/register?referral_code=H65IOClRGu5CM7nn5ykfad&ytag=GPU_YY_YX_git_agent-connect">this link</a> to receive ¥5 free platform credit!</td>
 </tr>
 
 <tr>
 <td width="150"><a href="https://dragoncode.codes/register?ref=23ZELCPX"><img src="assets/sponsors/dragoncode.png" alt="DragonCode" width="120"></a></td>
-<td>Thanks to DragonCode for supporting this project. DragonCode has prepared a special benefit for cc-connect users: register via <a href="https://dragoncode.codes/register?ref=23ZELCPX">this link</a> to get started.</td>
+<td>Thanks to DragonCode for supporting this project. DragonCode has prepared a special benefit for agent-connect users: register via <a href="https://dragoncode.codes/register?ref=23ZELCPX">this link</a> to get started.</td>
 </tr>
 
 
 <tr>
 <td width="150"><a href="https://code0.ai/register?aff=5cGO"><img src="assets/sponsors/code0.svg" alt="Code0" width="120"></a></td>
-<td>Thanks to Code0 for sponsoring this project! Code0 is an AI model aggregation API relay service for Chinese developers, compatible with OpenAI / Anthropic / Gemini protocols. One key for all mainstream models, stable support for Claude Code, Codex, Gemini CLI, cc-connect and more. Fixed exchange rate: ¥1.5 CNY = $1 USD API credit, transparent pricing, domestic direct connection, ready to use. Register via <a href="https://code0.ai/register?aff=5cGO">this link</a>.</td>
+<td>Thanks to Code0 for sponsoring this project! Code0 is an AI model aggregation API relay service for Chinese developers, compatible with OpenAI / Anthropic / Gemini protocols. One key for all mainstream models, stable support for Claude Code, Codex, Gemini CLI, agent-connect and more. Fixed exchange rate: ¥1.5 CNY = $1 USD API credit, transparent pricing, domestic direct connection, ready to use. Register via <a href="https://code0.ai/register?aff=5cGO">this link</a>.</td>
 </tr>
 
 <tr>
@@ -176,13 +176,13 @@ MiniMax-M3 pushes the frontier of coding and agentic AI, with a 1M-token context
 </p>
 
 <p align="center">
-  cc-connect bridges AI agents running on your machine to the messaging platforms you already use.<br/>
+  agent-connect bridges AI agents running on your machine to the messaging platforms you already use.<br/>
   Code review, research, automation, data analysis — anything an AI agent can do,<br/>
   now accessible from your phone, tablet, or any device with a chat app.
 </p>
 
 <p align="center">
-  <img src="docs/images/connector.png" alt="CC-Connect Architecture" width="90%"/>
+  <img src="docs/images/connector.png" alt="Agent-Connect Architecture" width="90%"/>
 </p>
 
 
@@ -205,13 +205,13 @@ No breaking changes. Coming from a v1.3.3-beta.*, this is a small fix-only upgra
 
 ## 🧩 Platform feature snapshot
 
-High-level view of what each **built-in platform** can do in cc-connect.
+High-level view of what each **built-in platform** can do in agent-connect.
 
 **Legend**
 
 | Symbol | Meaning |
 |--------|---------|
-| ✅ | Works in **stable** cc-connect with typical configuration |
+| ✅ | Works in **stable** agent-connect with typical configuration |
 | ⚠️ | Partial, needs extra config (e.g. speech / ASR), or limited by the vendor app or API |
 | ❌ | Not supported or not applicable in practice |
 
@@ -232,7 +232,7 @@ High-level view of what each **built-in platform** can do in cc-connect.
 > Per-platform setup: [Platform setup guides](#-platform-setup-guides) below.
 
 
-## ✨ Why cc-connect?
+## ✨ Why agent-connect?
 
 ### 🤖 Universal Agent Support
 **10+ AI Agents** — Claude Code, Codex, Cursor Agent, Kimi CLI, Qoder CLI, Gemini CLI, OpenCode, iFlow CLI, Pi, Devin, Copilot — plus any agent that supports the [Agent Client Protocol (ACP)](https://agentclientprotocol.com/get-started/agents). Use whichever fits your workflow, or all of them at once.
@@ -255,7 +255,7 @@ High-level view of what each **built-in platform** can do in cc-connect.
 **Scheduled Tasks** — Set up cron jobs in natural language. *"Every day at 6am, summarize GitHub trending"* just works.
 
 ### 🎤 Multimodal Support
-**Voice & Images** — Send voice messages or screenshots; cc-connect handles STT/TTS and multimodal forwarding.
+**Voice & Images** — Send voice messages or screenshots; agent-connect handles STT/TTS and multimodal forwarding.
 
 ### 📦 Multi-Project Architecture
 **Multi-Project** — One process, multiple projects, each with its own agent + platform combo.
@@ -265,9 +265,9 @@ High-level view of what each **built-in platform** can do in cc-connect.
 
 
 <p align="center">
-  <img src="docs/images/screenshot/cc-connect-lark.JPG" alt="飞书" width="32%" />
-  <img src="docs/images/screenshot/cc-connect-telegram.JPG" alt="Telegram" width="32%" />
-  <img src="docs/images/screenshot/cc-connect-wechat.JPG" alt="微信" width="32%" />
+  <img src="docs/images/screenshot/agent-connect-lark.JPG" alt="飞书" width="32%" />
+  <img src="docs/images/screenshot/agent-connect-telegram.JPG" alt="Telegram" width="32%" />
+  <img src="docs/images/screenshot/agent-connect-wechat.JPG" alt="微信" width="32%" />
 </p>
 <p align="center">
   <em>Left：Lark &nbsp;|&nbsp; Telegram &nbsp;|&nbsp; Right：Wechat</em>
@@ -281,7 +281,7 @@ High-level view of what each **built-in platform** can do in cc-connect.
 > **The easiest way** — Send this to Claude Code or any AI coding agent, and it will handle the entire installation and configuration for you:
 
 ```bash
-Follow https://raw.githubusercontent.com/chenhg5/cc-connect/refs/heads/main/INSTALL.md to install and configure cc-connect.
+Follow https://raw.githubusercontent.com/chenhg5/agent-connect/refs/heads/main/INSTALL.md to install and configure agent-connect.
 ```
 
 
@@ -290,37 +290,37 @@ Follow https://raw.githubusercontent.com/chenhg5/cc-connect/refs/heads/main/INST
 **Via npm:**
 
 ```bash
-npm install -g cc-connect
+npm install -g agent-connect
 ```
 
 **Via Homebrew (macOS / Linux):**
 
 ```bash
-brew install cc-connect
+brew install agent-connect
 ```
 
-**Download binary from [GitHub Releases](https://github.com/chenhg5/cc-connect/releases):**
+**Download binary from [GitHub Releases](https://github.com/chenhg5/agent-connect/releases):**
 
 ```bash
 # Linux amd64 - Stable
-curl -L -o cc-connect https://github.com/chenhg5/cc-connect/releases/latest/download/cc-connect-linux-amd64
-chmod +x cc-connect
-sudo mv cc-connect /usr/local/bin/
+curl -L -o agent-connect https://github.com/chenhg5/agent-connect/releases/latest/download/agent-connect-linux-amd64
+chmod +x agent-connect
+sudo mv agent-connect /usr/local/bin/
 
 ```
 
 **Build from source (requires Go 1.22+):**
 
 ```bash
-git clone https://github.com/chenhg5/cc-connect.git
-cd cc-connect
+git clone https://github.com/chenhg5/agent-connect.git
+cd agent-connect
 make build
 ```
 
 
 ### ⚙️ Configure
 
-> **💡 Tip: Use the Web UI to configure** — After installing, run `cc-connect web` to configure the web admin and open the dashboard in your browser. You can visually create projects, add platforms, manage providers, and chat with your agent — no need to manually edit TOML files. **Note:** `cc-connect web` only configures and opens the browser — you still need to run `cc-connect` separately to start the service.
+> **💡 Tip: Use the Web UI to configure** — After installing, run `agent-connect web` to configure the web admin and open the dashboard in your browser. You can visually create projects, add platforms, manage providers, and chat with your agent — no need to manually edit TOML files. **Note:** `agent-connect web` only configures and opens the browser — you still need to run `agent-connect` separately to start the service.
 
 If you prefer manual configuration:
 
@@ -332,13 +332,13 @@ vim ~/.cc-connect/config.toml
 
 Set `admin_from = "alice,bob"` in a project to allow those user IDs to run privileged commands such as `/dir` and `/shell`.
 `admin_from` must be placed under `[[projects]]` (not under `[projects.platforms.options]`). You can use `/whoami` or `/status` to get your current `User ID`.
-When a user runs `/dir reset`, cc-connect restores the configured `work_dir` and clears the persisted override stored under `data_dir/projects/<project>.state.json`.
+When a user runs `/dir reset`, agent-connect restores the configured `work_dir` and clears the persisted override stored under `data_dir/projects/<project>.state.json`.
 
 
 ### ▶️ Run
 
 ```bash
-./cc-connect
+./agent-connect
 ```
 
 
@@ -346,14 +346,14 @@ When a user runs `/dir reset`, cc-connect restores the configured `work_dir` and
 
 ```bash
 # npm
-npm install -g cc-connect
+npm install -g agent-connect
 
 # Homebrew
-brew upgrade cc-connect
+brew upgrade agent-connect
 
 # Binary self-update
-cc-connect update           # Stable
-cc-connect update --pre     # Include pre-releases
+agent-connect update           # Stable
+agent-connect update --pre     # Include pre-releases
 ```
 
 
@@ -432,7 +432,7 @@ The default is **30 minutes** when unset. Set `reset_on_idle_mins = 0` to opt ou
 
 On Linux/macOS, a project can spawn its agent under a different Unix
 user for OS-level file-system isolation from the supervisor user that
-runs cc-connect. Currently supported by Claude Code.
+runs agent-connect. Currently supported by Claude Code.
 
 ```toml
 [[projects]]
@@ -451,14 +451,14 @@ for details. See
 [`docs/usage.md`](./docs/usage.md#running-agents-as-a-different-unix-user-run_as_user)
 for the full setup.
 
-Before starting cc-connect, audit the setup with:
+Before starting agent-connect, audit the setup with:
 
 ```bash
-cc-connect doctor user-isolation
+agent-connect doctor user-isolation
 ```
 
 This runs three go/no-go preflight gates and an isolation probe that
-reports what the target user can and cannot read. cc-connect refuses to
+reports what the target user can and cannot read. agent-connect refuses to
 start if any gate fails or if the probe detects a cross-user leak.
 
 ---
@@ -525,7 +525,7 @@ or:
 /cron setup
 ```
 
-This refreshes the cc-connect instructions in the project memory file so the agent knows how to send attachments back.
+This refreshes the agent-connect instructions in the project memory file so the agent knows how to send attachments back.
 
 You can control this feature globally in `config.toml`:
 
@@ -533,15 +533,15 @@ You can control this feature globally in `config.toml`:
 attachment_send = "on"  # default: "on"; set to "off" to block image/file send-back
 ```
 
-This switch is independent from the agent's `/mode`. It only controls `cc-connect send --image/--file`. Voice send-back uses the TTS config instead.
+This switch is independent from the agent's `/mode`. It only controls `agent-connect send --image/--file`. Voice send-back uses the TTS config instead.
 
 Examples:
 
 ```bash
-cc-connect send --image /absolute/path/to/chart.png
-cc-connect send --file /absolute/path/to/report.pdf
-cc-connect send --file /absolute/path/to/report.pdf --image /absolute/path/to/chart.png
-cc-connect send --tts "Hello from cc-connect"
+agent-connect send --image /absolute/path/to/chart.png
+agent-connect send --file /absolute/path/to/report.pdf
+agent-connect send --file /absolute/path/to/report.pdf --image /absolute/path/to/chart.png
+agent-connect send --tts "Hello from agent-connect"
 ```
 
 Notes:
@@ -571,7 +571,7 @@ Notes:
 
 ## ☕ Support the Project
 
-If cc-connect has been helpful to you, consider buying us a coffee! Your support helps us:
+If agent-connect has been helpful to you, consider buying us a coffee! Your support helps us:
 
 - 🛠️ Maintain and improve the project
 - 📚 Write better documentation and tutorials
@@ -611,18 +611,18 @@ We accept the following commercial collaborations:
 
 ## 🙏 Contributors
 
-<a href="https://github.com/chenhg5/cc-connect/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=chenhg5/cc-connect&v=20250313" />
+<a href="https://github.com/chenhg5/agent-connect/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=chenhg5/agent-connect&v=20250313" />
 </a>
 
 
 ## ⭐ Star History
 
-<a href="https://www.star-history.com/#chenhg5/cc-connect&Date">
+<a href="https://www.star-history.com/#chenhg5/agent-connect&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=chenhg5/cc-connect&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=chenhg5/cc-connect&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=chenhg5/cc-connect&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=chenhg5/agent-connect&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=chenhg5/agent-connect&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=chenhg5/agent-connect&type=Date" />
  </picture>
 </a>
 
@@ -633,5 +633,5 @@ MIT License
 
 
 <p align="center">
-  <sub>Built with ❤️ by the cc-connect community</sub>
+  <sub>Built with ❤️ by the agent-connect community</sub>
 </p>

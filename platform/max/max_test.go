@@ -272,9 +272,10 @@ func (m *mockAPI) handleUploads(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleCDN mimics per-kind MAX CDN response shapes:
-//   image: {"photos": {"<id>": {"token": "..."}}}
-//   file:  {"token": "..."}
-//   video/audio: XML "<retval>1</retval>" (token comes from /uploads instead)
+//
+//	image: {"photos": {"<id>": {"token": "..."}}}
+//	file:  {"token": "..."}
+//	video/audio: XML "<retval>1</retval>" (token comes from /uploads instead)
 func (m *mockAPI) handleCDN(w http.ResponseWriter, r *http.Request) {
 	atomic.AddInt32(&m.cdnCalls, 1)
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
@@ -665,7 +666,6 @@ func TestSendAudio(t *testing.T) {
 		t.Fatalf("want audio attachment, got %+v", body.Attachments)
 	}
 }
-
 
 func TestNormalizeLineBreaks(t *testing.T) {
 	cases := []struct {

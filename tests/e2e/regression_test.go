@@ -1,6 +1,6 @@
 //go:build regression
 
-// Package e2e contains smoke and regression tests for cc-connect.
+// Package e2e contains smoke and regression tests for agent-connect.
 // Regression tests cover critical functionality paths and should be run
 // before each release.
 package e2e
@@ -257,13 +257,13 @@ func TestRegression_PermissionDefault(t *testing.T) {
 
 	manager.Configure("member", []core.RoleInput{
 		{
-			Name:         "admin",
-			UserIDs:      []string{"admin-user"},
+			Name:             "admin",
+			UserIDs:          []string{"admin-user"},
 			DisabledCommands: []string{"rm", "delete"},
 		},
 		{
-			Name:         "member",
-			UserIDs:      []string{"regular-user", "*"},
+			Name:             "member",
+			UserIDs:          []string{"regular-user", "*"},
 			DisabledCommands: []string{},
 		},
 	})
@@ -631,7 +631,7 @@ func TestRegression_CardButtons(t *testing.T) {
 		Build()
 
 	rows := card.CollectButtons()
-	assert.Len(t, rows, 1) // One row of buttons
+	assert.Len(t, rows, 1)    // One row of buttons
 	assert.Len(t, rows[0], 3) // Three buttons
 
 	// Verify button values
@@ -1012,7 +1012,7 @@ func TestRegression_DiscordEmbed(t *testing.T) {
 			{Name: "Duration", Value: "1.5s", Inline: true},
 		},
 	}
-	embed.Footer.Text = "cc-connect v1.0"
+	embed.Footer.Text = "agent-connect v1.0"
 
 	// Verify structure
 	assert.Equal(t, "Test Result", embed.Title)
@@ -1022,7 +1022,7 @@ func TestRegression_DiscordEmbed(t *testing.T) {
 	assert.Equal(t, "Status", embed.Fields[0].Name)
 	assert.Equal(t, "Success", embed.Fields[0].Value)
 	assert.True(t, embed.Fields[0].Inline)
-	assert.Equal(t, "cc-connect v1.0", embed.Footer.Text)
+	assert.Equal(t, "agent-connect v1.0", embed.Footer.Text)
 
 	t.Log("Discord embed: PASS")
 }
@@ -1095,7 +1095,7 @@ func TestRegression_DingtalkCrypto(t *testing.T) {
 			name:        "valid signature",
 			signature:   "test-signature",
 			timestamp:   "1234567890",
-			nonce:      "random-nonce",
+			nonce:       "random-nonce",
 			token:       "test-token",
 			expectValid: true,
 		},
@@ -1176,5 +1176,3 @@ func TestRegression_CronCancel(t *testing.T) {
 
 	t.Log("Cron cancel: PASS")
 }
-
-

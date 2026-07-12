@@ -27,7 +27,7 @@ import (
 // ── P0-1: 基础消息收发 ────────────────────────────────────────────────────────
 
 // TestP0_1_BasicMessageFlow_ClaudeCode verifies the core message loop:
-// user sends a message → cc-connect routes it to Claude Code → user receives
+// user sends a message → agent-connect routes it to Claude Code → user receives
 // a non-empty reply.
 //
 // This is the most fundamental P0 test. If this fails, nothing else matters.
@@ -78,7 +78,7 @@ func testBasicMessageFlow(t *testing.T, agentType string) {
 // ── P0-2: /new 创建新会话 ─────────────────────────────────────────────────────
 
 // TestP0_2_NewSession_ClaudeCode verifies /new creates a new session and
-// cc-connect sends a confirmation message.
+// agent-connect sends a confirmation message.
 func TestP0_2_NewSession_ClaudeCode(t *testing.T) {
 	t.Parallel()
 	testNewSession(t, "claudecode")
@@ -138,7 +138,7 @@ func testListSessions(t *testing.T, agentType string) {
 
 // ── P0-5: /stop 停止当前任务 ──────────────────────────────────────────────────
 
-// TestP0_5_StopCurrentTask_ClaudeCode verifies /stop causes cc-connect to
+// TestP0_5_StopCurrentTask_ClaudeCode verifies /stop causes agent-connect to
 // reply within a reasonable time even while a task is running.
 //
 // Strategy: we don't send a genuinely long-running task (too unreliable);

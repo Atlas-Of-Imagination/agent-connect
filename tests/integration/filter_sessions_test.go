@@ -115,7 +115,7 @@ func writeClaudeCodeSessionFixture(t *testing.T, projectDir, sessionID, userProm
 }
 
 // setupFilterSessionTest creates a real agent with fixture session files and
-// wires it into a real Engine. Some sessions are tracked by cc-connect (via
+// wires it into a real Engine. Some sessions are tracked by agent-connect (via
 // SessionManager), others are "external" (exist on disk but not tracked).
 // This tests the full pipeline: real agent adapter → ListSessions → Engine filtering.
 func setupFilterSessionTest(t *testing.T, agentType string, filterEnabled bool) (

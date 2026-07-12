@@ -172,7 +172,7 @@ func (s *acpSession) handshake(resumeSessionID string, authMethod string) error 
 			"terminal": false,
 		},
 		"clientInfo": map[string]any{
-			"name":    "cc-connect",
+			"name":    "agent-connect",
 			"version": "1.0.0",
 		},
 	}
@@ -382,7 +382,7 @@ func (s *acpSession) onNotification(method string, params json.RawMessage) {
 
 // maybeAbsorbCurrentModeUpdate watches session/update notifications
 // for `current_mode_update` (server-driven mode switch, e.g. when the
-// user toggles modes via the Windsurf/IDE UI while cc-connect is
+// user toggles modes via the Windsurf/IDE UI while agent-connect is
 // connected). Keeping currentMode in sync here means the IM `/mode`
 // indicator reflects the true server state rather than the last
 // client-initiated value.
@@ -394,7 +394,7 @@ func (s *acpSession) maybeAbsorbCurrentModeUpdate(params json.RawMessage) {
 		return
 	}
 	var head struct {
-		Kind     string `json:"sessionUpdate"`
+		Kind          string `json:"sessionUpdate"`
 		CurrentModeID string `json:"currentModeId"`
 	}
 	if json.Unmarshal(wrap.Update, &head) != nil {

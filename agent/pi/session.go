@@ -56,24 +56,24 @@ type piSession struct {
 	extraArgs []string // extra args from cmd, prepended before pi args
 	workDir   string
 	model     string
-	mode      string   // permission mode: "default" | "yolo"
+	mode      string // permission mode: "default" | "yolo"
 	thinking  string
-	rpc       bool     // true = persistent RPC process, false = one-shot json mode
+	rpc       bool // true = persistent RPC process, false = one-shot json mode
 	extraEnv  []string
 	attachDir string
-	events  chan core.Event
+	events    chan core.Event
 	sessionID atomic.Value
-	ctx     context.Context
-	cancel  context.CancelFunc
-	wg      sync.WaitGroup // tracks readLoopRPC goroutine (RPC mode only)
-	sendWg  sync.WaitGroup // tracks in-flight Send() calls
-	alive   atomic.Bool
+	ctx       context.Context
+	cancel    context.CancelFunc
+	wg        sync.WaitGroup // tracks readLoopRPC goroutine (RPC mode only)
+	sendWg    sync.WaitGroup // tracks in-flight Send() calls
+	alive     atomic.Bool
 
-	thinkingBuf   strings.Builder
-	thinkingMu    sync.Mutex
-	modelsCW      map[string]int // cached from ~/.pi/agent/models.json
-	usageMu    sync.Mutex
-	lastUsage  *core.ContextUsage
+	thinkingBuf strings.Builder
+	thinkingMu  sync.Mutex
+	modelsCW    map[string]int // cached from ~/.pi/agent/models.json
+	usageMu     sync.Mutex
+	lastUsage   *core.ContextUsage
 
 	// RPC-only fields (nil/zero when rpc=false)
 	rpcCmd     *exec.Cmd
@@ -82,7 +82,7 @@ type piSession struct {
 	stderrBuf  cappedStderrWriter
 	rpcReady   chan struct{} // closed once after handleEvent stores sessionId from the get_state probe written by startRPC
 
-	// Extension UI: maps Pi's extension_ui_request id -> cc-connect RequestID
+	// Extension UI: maps Pi's extension_ui_request id -> agent-connect RequestID
 	extPendingMu  sync.Mutex
 	extPending    map[string]string // Pi ext_ui_id -> cc-conn RequestID
 	extPendingRev map[string]string // cc-conn RequestID -> Pi ext_ui_id
@@ -95,7 +95,7 @@ type piSession struct {
 // way to learn the session id is to send {"type":"get_state"} and parse the
 // matching response. By using a fixed sentinel id we can match the response
 // unambiguously even if other commands are in flight.
-const stateProbeID = "cc-connect-state-probe"
+const stateProbeID = "agent-connect-state-probe"
 
 // sessionIDReady reports whether the session id has been observed on the
 // pi side and stored. Used by readLoopRPC to decide when it is safe to
@@ -523,7 +523,7 @@ func (s *piSession) handleEvent(raw map[string]any) {
 		// Pi fires this when ctx.compact() finishes. ctx.compact() is
 		// fire-and-forget: it never sends agent_end, because compaction
 		// runs out-of-band with the agent loop. Extensions that drive
-		// ctx.compact() (e.g. cc-connect-compact.ts, trigger-compact.ts)
+		// ctx.compact() (e.g. agent-connect-compact.ts, trigger-compact.ts)
 		// handle their own user feedback via stdout synth events and the
 		// normal slash-command path returns immediately.
 		//
@@ -532,7 +532,7 @@ func (s *piSession) handleEvent(raw map[string]any) {
 		// 1. If pi reports an errorMessage, emit EventError. This covers
 		//    compaction paths that have no extension to surface the error
 		//    to the user (e.g. trigger-compact.ts only calls ctx.ui.notify,
-		//    which cc-connect drops in RPC mode). pi's errorMessage is
+		//    which agent-connect drops in RPC mode). pi's errorMessage is
 		//    usually self-describing ("Compaction failed: Nothing to compact
 		//    (session too small)"), so we pass it through verbatim — no
 		//    additional prefix — to avoid "Error: compaction failed:
@@ -542,7 +542,7 @@ func (s *piSession) handleEvent(raw map[string]any) {
 		//    forever in processInteractiveEvents:
 		//      (a) trigger-compact: handler returns without await, so no
 		//          synthetic agent_end ever lands on stdout.
-		//      (b) cc-connect-compact: an extension that crashes, races a
+		//      (b) agent-connect-compact: an extension that crashes, races a
 		//          kill, or simply omits the finally-synthesized agent_end
 		//          leaves the turn open.
 		//    JSON mode (json one-shot) is unaffected — process exit is the
@@ -615,9 +615,9 @@ func (s *piSession) forwardConfirm(id string, raw map[string]any) {
 	s.extPendingMu.Unlock()
 
 	evt := core.Event{
-		Type:     core.EventPermissionRequest,
+		Type:      core.EventPermissionRequest,
 		RequestID: requestID,
-		ToolName: "extension_confirm",
+		ToolName:  "extension_confirm",
 		ToolInput: fmt.Sprintf("%s: %s", title, truncStr(message, 200)),
 		ToolInputRaw: map[string]any{
 			"title":   title,
@@ -651,9 +651,9 @@ func (s *piSession) forwardInput(id string, raw map[string]any) {
 	s.extPendingMu.Unlock()
 
 	evt := core.Event{
-		Type:     core.EventPermissionRequest,
+		Type:      core.EventPermissionRequest,
 		RequestID: requestID,
-		ToolName: "extension_input",
+		ToolName:  "extension_input",
 		ToolInput: fmt.Sprintf("%s [%s]", title, placeholder),
 		ToolInputRaw: map[string]any{
 			"title":       title,
@@ -674,11 +674,11 @@ func (s *piSession) forwardSelect(id string, raw map[string]any) {
 	// Pi Agent sends options in either of two shapes:
 	//   - []string                         ("Red", "Green", "Blue")
 	//   - []map[string]any                 ([{label:"Red", description:"..."}])
-	// The object form carries an optional description which cc-connect's
+	// The object form carries an optional description which agent-connect's
 	// AskUserQuestion card layout renders as a full-width markdown line
 	// under each option (the long-description fix in core/engine.go). If we
 	// only accepted strings here, any object option would be silently dropped
-	// — the user's TUI sees the description, but cc-connect never forwards
+	// — the user's TUI sees the description, but agent-connect never forwards
 	// it to the engine, so the Feishu card renders label-only. Accept both
 	// shapes for forward compatibility.
 	userOpts := make([]core.UserQuestionOption, 0, len(options))
@@ -733,15 +733,15 @@ func (s *piSession) forwardSelect(id string, raw map[string]any) {
 
 	// ToolInput carries a short label-only summary for the engine's tool-use
 	// stream; the rich per-option content (with descriptions) lives in the
-	// Questions field below, which cc-connect's card layout renders.
+	// Questions field below, which agent-connect's card layout renders.
 	labelSummary := make([]string, 0, len(userOpts))
 	for _, o := range userOpts {
 		labelSummary = append(labelSummary, o.Label)
 	}
 	evt := core.Event{
-		Type:     core.EventPermissionRequest,
+		Type:      core.EventPermissionRequest,
 		RequestID: requestID,
-		ToolName: "extension_select",
+		ToolName:  "extension_select",
 		ToolInput: fmt.Sprintf("%s [%s]", title, strings.Join(labelSummary, ", ")),
 		ToolInputRaw: map[string]any{
 			"title":   title,

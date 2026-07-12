@@ -1,4 +1,4 @@
-// Package reasonix bridges cc-connect to a reasonix serve instance.
+// Package reasonix bridges agent-connect to a reasonix serve instance.
 // It implements the core.Agent interface by forwarding prompts to reasonix's
 // HTTP API (POST /submit) and consuming the SSE event stream (GET /events).
 //
@@ -154,8 +154,8 @@ func (a *Agent) ProjectMemoryFile() string {
 func (a *Agent) GlobalMemoryFile() string { return "" }
 
 // Static interface assertions — ensure Agent remains compliant with core.Agent.
-var _ core.Agent = (*Agent)(nil)        // *Agent satisfies core.Agent
-var _ core.ModeSwitcher = (*Agent)(nil)          // mode switching
-var _ core.WorkDirSwitcher = (*Agent)(nil)       // work dir switching
-var _ core.ContextCompressor = (*Agent)(nil)     // compact support
-var _ core.MemoryFileProvider = (*Agent)(nil)    // memory file support
+var _ core.Agent = (*Agent)(nil)              // *Agent satisfies core.Agent
+var _ core.ModeSwitcher = (*Agent)(nil)       // mode switching
+var _ core.WorkDirSwitcher = (*Agent)(nil)    // work dir switching
+var _ core.ContextCompressor = (*Agent)(nil)  // compact support
+var _ core.MemoryFileProvider = (*Agent)(nil) // memory file support

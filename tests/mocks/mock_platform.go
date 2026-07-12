@@ -1,4 +1,4 @@
-// Package mocks provides mock implementations for testing cc-connect components.
+// Package mocks provides mock implementations for testing agent-connect components.
 package mocks
 
 import (

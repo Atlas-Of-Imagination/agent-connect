@@ -978,7 +978,7 @@ func TestSendWPSMessage_Success(t *testing.T) {
 }
 
 // TestSendWPSMessage_NewlinesConvertedToHardBreaks is the regression test for
-// the "/status output renders as a single line" bug. cc-connect engine emits
+// the "/status output renders as a single line" bug. agent-connect engine emits
 // multi-line output separated by bare "\n", but WPS markdown (CommonMark)
 // collapses single "\n" into a space, producing unreadable output. This
 // confirms we transform the content to use markdown hard line breaks
@@ -1008,8 +1008,8 @@ func TestSendWPSMessage_NewlinesConvertedToHardBreaks(t *testing.T) {
 	})
 	p := plat.(*Platform)
 
-	// Simulated cc-connect engine /status output with bare "\n" separators.
-	in := "cc-connect Status\n\nProject: foo\nAgent: claudecode\nUptime: 2m"
+	// Simulated agent-connect engine /status output with bare "\n" separators.
+	in := "agent-connect Status\n\nProject: foo\nAgent: claudecode\nUptime: 2m"
 	if err := p.Reply(context.Background(), replyContext{ChatID: "c"}, in); err != nil {
 		t.Fatalf("Reply: %v", err)
 	}
@@ -1018,7 +1018,7 @@ func TestSendWPSMessage_NewlinesConvertedToHardBreaks(t *testing.T) {
 	if err := json.Unmarshal(gotBody, &req); err != nil {
 		t.Fatalf("parse: %v", err)
 	}
-	want := "cc-connect Status  \n  \nProject: foo  \nAgent: claudecode  \nUptime: 2m"
+	want := "agent-connect Status  \n  \nProject: foo  \nAgent: claudecode  \nUptime: 2m"
 	if req.Content.Text.Content != want {
 		t.Fatalf("expected newlines converted to '  \\n', got %q", req.Content.Text.Content)
 	}
