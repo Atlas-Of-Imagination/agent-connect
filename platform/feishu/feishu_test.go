@@ -3,6 +3,7 @@ package feishu
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -1215,6 +1216,44 @@ func TestOnMessageThreadIsolationAdmitsAttachmentWithoutMention(t *testing.T) {
 	case <-time.After(300 * time.Millisecond):
 		// expected
 	}
+
+	// Opt in through the real configuration path, then continue the same thread.
+	configured, err := newPlatform("feishu", lark.FeishuBaseUrl, map[string]any{
+		"app_id": "cli_followups", "app_secret": "secret",
+		"thread_isolation": true, "thread_reply_all": true,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	p.threadReplyAll = extractBasePlatform(configured).threadReplyAll
+	for i, tc := range []struct{ kind, content string }{
+		{"text", `{"text":"优先级P2，确认提交"}`},
+		{"post", `{"zh_cn":{"title":"","content":[[{"tag":"text","text":"补充说明"}]]}}`},
+	} {
+		id := fmt.Sprintf("om_followup_%d", i)
+		if err := p.onMessage(context.Background(), buildEvent(id, tc.kind, tc.content, nil, rootMsgID)); err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case msg := <-received:
+			if msg.MessageID != id || msg.SessionKey != threadKey {
+				t.Fatalf("wrong follow-up routing: %s %s", msg.MessageID, msg.SessionKey)
+			}
+		case <-time.After(2 * time.Second):
+			t.Fatalf("%s follow-up in engaged thread was dropped", tc.kind)
+		}
+	}
+	for i, root := range []string{"", "om_unrelated_root"} {
+		if err := p.onMessage(context.Background(), buildEvent(fmt.Sprintf("om_unrelated_%d", i), "text", `{"text":"普通聊天"}`, nil, root)); err != nil {
+			t.Fatal(err)
+		}
+		select {
+		case msg := <-received:
+			t.Fatalf("unrelated message dispatched: %s", msg.MessageID)
+		case <-time.After(100 * time.Millisecond):
+		}
+	}
+
 }
 
 func extractBasePlatform(p core.Platform) *Platform {
